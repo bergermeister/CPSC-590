@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProducerConsumer", "ProducerConsumer\ProducerConsumer.csproj", "{A9441542-B5D7-47C8-8A37-8ABB4B7D252A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadPooling", "ThreadPooling\ThreadPooling.csproj", "{813A1CF6-FDD4-417C-AC89-88CF285D0DE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemaphoreTest", "SemaphoreTest\SemaphoreTest.csproj", "{9D140135-FD02-4298-80CF-25656C9C470E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{A9441542-B5D7-47C8-8A37-8ABB4B7D252A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9441542-B5D7-47C8-8A37-8ABB4B7D252A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9441542-B5D7-47C8-8A37-8ABB4B7D252A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{813A1CF6-FDD4-417C-AC89-88CF285D0DE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{813A1CF6-FDD4-417C-AC89-88CF285D0DE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{813A1CF6-FDD4-417C-AC89-88CF285D0DE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{813A1CF6-FDD4-417C-AC89-88CF285D0DE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D140135-FD02-4298-80CF-25656C9C470E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D140135-FD02-4298-80CF-25656C9C470E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D140135-FD02-4298-80CF-25656C9C470E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D140135-FD02-4298-80CF-25656C9C470E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
