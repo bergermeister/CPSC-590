@@ -1,10 +1,12 @@
-﻿using System.Threading;
+﻿
+using System.Threading;
+using System.Windows.Forms;
 
 namespace SemaphoreTest
 {
    class TcLimoCar
    {
-      private object    voLock;
+      private object    voLock = new object( );
       private int       viNumber;
       private int       viTravelTime;
       private int       viCustomers;
@@ -40,7 +42,18 @@ namespace SemaphoreTest
       public void MUse( )
       {
          this.voSemLim.WaitOne( );  // Check if gate is open
-
+         lock( this.voLock )
+         {
+            this.viCustomers++;
+         }
+         MessageBox.Show( "OK to use limo..\n" + "Currently " + this.viCustomers.ToString( ) +
+                          " Customers in limo" );
+         Thread.Sleep( 1000 * this.viTravelTime );
+         this.voSemLim.Release( );  // Increment gate count
+         lock( this.voLock )
+         {
+            this.viCustomers--;
+         }
       }
    }
 }
