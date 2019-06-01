@@ -242,6 +242,8 @@ namespace TPLTest
          int       kiPos1;
          int       kiPos2;
 
+         koClient.Headers[ HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2";
+
          while( true )
          {
             try
@@ -258,9 +260,9 @@ namespace TPLTest
                aoToken.WaitHandle.WaitOne( 15000 );
                aoToken.ThrowIfCancellationRequested( );
             }
-            catch( Exception )
+            catch( Exception koException )
             {
-               throw;
+               Console.WriteLine( koException.Message );
             }
          }
       }
