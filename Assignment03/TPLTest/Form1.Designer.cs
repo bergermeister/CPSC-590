@@ -41,6 +41,9 @@
          this.voLblStockPrice = new System.Windows.Forms.Label();
          this.voBtnStopTwoTasks = new System.Windows.Forms.Button();
          this.voBtnStartTwoTasks = new System.Windows.Forms.Button();
+         this.voBtnStopTask1 = new System.Windows.Forms.Button();
+         this.voBtnStartSepTasks = new System.Windows.Forms.Button();
+         this.voBtnStopTask2 = new System.Windows.Forms.Button();
          this.SuspendLayout();
          // 
          // voBtnThreadLikeTask
@@ -168,11 +171,44 @@
          this.voBtnStartTwoTasks.UseVisualStyleBackColor = true;
          this.voBtnStartTwoTasks.Click += new System.EventHandler(this.voBtnStartTwoTasks_Click);
          // 
+         // voBtnStopTask1
+         // 
+         this.voBtnStopTask1.Location = new System.Drawing.Point(277, 155);
+         this.voBtnStopTask1.Name = "voBtnStopTask1";
+         this.voBtnStopTask1.Size = new System.Drawing.Size(80, 23);
+         this.voBtnStopTask1.TabIndex = 14;
+         this.voBtnStopTask1.Text = "Stop Task 1";
+         this.voBtnStopTask1.UseVisualStyleBackColor = true;
+         this.voBtnStopTask1.Click += new System.EventHandler(this.voBtnStopTask1_Click);
+         // 
+         // voBtnStartSepTasks
+         // 
+         this.voBtnStartSepTasks.Location = new System.Drawing.Point(277, 126);
+         this.voBtnStartSepTasks.Name = "voBtnStartSepTasks";
+         this.voBtnStartSepTasks.Size = new System.Drawing.Size(168, 23);
+         this.voBtnStartSepTasks.TabIndex = 13;
+         this.voBtnStartSepTasks.Text = "Start Sep. Tasks";
+         this.voBtnStartSepTasks.UseVisualStyleBackColor = true;
+         this.voBtnStartSepTasks.Click += new System.EventHandler(this.voBtnStartSepTasks_Click);
+         // 
+         // voBtnStopTask2
+         // 
+         this.voBtnStopTask2.Location = new System.Drawing.Point(363, 155);
+         this.voBtnStopTask2.Name = "voBtnStopTask2";
+         this.voBtnStopTask2.Size = new System.Drawing.Size(83, 23);
+         this.voBtnStopTask2.TabIndex = 15;
+         this.voBtnStopTask2.Text = "Stop Task 2";
+         this.voBtnStopTask2.UseVisualStyleBackColor = true;
+         this.voBtnStopTask2.Click += new System.EventHandler(this.voBtnStopTask2_Click);
+         // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(492, 261);
+         this.Controls.Add(this.voBtnStopTask2);
+         this.Controls.Add(this.voBtnStopTask1);
+         this.Controls.Add(this.voBtnStartSepTasks);
          this.Controls.Add(this.voBtnStopTwoTasks);
          this.Controls.Add(this.voBtnStartTwoTasks);
          this.Controls.Add(this.voLblStockPrice);
@@ -209,6 +245,9 @@
       private System.Windows.Forms.Label voLblStockPrice;
       private System.Windows.Forms.Button voBtnStopTwoTasks;
       private System.Windows.Forms.Button voBtnStartTwoTasks;
+      private System.Windows.Forms.Button voBtnStopTask1;
+      private System.Windows.Forms.Button voBtnStartSepTasks;
+      private System.Windows.Forms.Button voBtnStopTask2;
    }
 }
 

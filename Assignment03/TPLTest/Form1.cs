@@ -18,6 +18,8 @@ namespace TPLTest
       private ToShow                  voDelShowTime = null;
       private ToShow                  voDelShowStkP = null;
       private CancellationTokenSource voCancelTkSrc = null;
+      private CancellationTokenSource voCancelShowT = null;
+      private CancellationTokenSource voCancelShowS = null;
 
       public Form1( )
       {
@@ -186,6 +188,78 @@ namespace TPLTest
 
       private void voBtnStopTwoTasks_Click( object sender, EventArgs e )
       {
+         Task koCancel = new Task( this.mCancelAllTasks );
+         koCancel.Start( );
+      }
+
+      private void voBtnStartSepTasks_Click( object sender, EventArgs e )
+      {
+         CancellationToken aoToken1;
+         CancellationToken aoToken2;
+         Action< object >  aoCallback = new Action< object >( this.mShowStockPriceCancelled );
+
+         if( ( this.voTskShowTime == null ) || this.voTskShowTime.IsCompleted )
+         {
+            this.voCancelShowT = new CancellationTokenSource( );
+            aoToken1 = this.voCancelShowT.Token;
+            this.voTskShowTime = new Task( ( ) => this.mShowTime( aoToken1 ), aoToken1 );
+         }
+         
+         if( this.voTskShowTime.Status != TaskStatus.Running )
+         {
+            this.voTskShowTime.Start( );
+         }
+
+         if( ( this.voTskStkPrice == null ) || this.voTskStkPrice.IsCompleted )
+         {
+            this.voCancelShowS = new CancellationTokenSource( );
+            aoToken2 = this.voCancelShowS.Token;
+            aoToken2.Register( this.mShowStockPriceCancelled, DateTime.Now );
+            this.voTskStkPrice = new Task( ( ) => this.mShowStockPrice( aoToken2 ), aoToken2 );
+         }
+          
+         if( this.voTskStkPrice.Status != TaskStatus.Running )
+         {
+            this.voTskStkPrice.Start( );
+         }
+      }
+
+      private void voBtnStopTask1_Click( object sender, EventArgs e )
+      {
+         Task koCancel = new Task( ( ) =>
+         {
+            try
+            {
+               this.voCancelShowS.Cancel( );
+               this.voTskStkPrice.Wait( );
+            }
+            catch( AggregateException koEx )
+            {
+               this.voStatusStrip.Invoke( this.voDelShowStkP, new string[ ]{ this.voTskStkPrice.Status.ToString( ) } );
+            }
+         } );
+         koCancel.Start( );
+      }
+
+      private void voBtnStopTask2_Click( object sender, EventArgs e )
+      {
+         Task koCancel = new Task( ( ) =>
+         {
+            try
+            {
+               this.voCancelShowT.Cancel( );
+               this.voTskShowTime.Wait( );
+            }
+            catch( AggregateException koEx )
+            {
+               this.voStatusStrip.Invoke( this.voDelShowTime, new string[ ]{ this.voTskShowTime.Status.ToString( ) } );
+            }
+         } );
+         koCancel.Start( );
+      }
+
+      private void mCancelAllTasks( )
+      {
          try
          {
             this.voCancelTkSrc.Cancel( );
@@ -193,13 +267,20 @@ namespace TPLTest
          }
          catch( AggregateException koEx )
          {
-            this.voLblStatus.Text = this.voTskShowTime.Status.ToString( );
-            this.voLblStockPrice.Text = this.voTskStkPrice.Status.ToString( );
+            this.voStatusStrip.Invoke( this.voDelShowTime, new string[ ]{ this.voTskShowTime.Status.ToString( ) } );
+            this.voStatusStrip.Invoke( this.voDelShowTime, new string[ ]{ this.voTskStkPrice.Status.ToString( ) } );
+
             foreach( var koIE in koEx.InnerExceptions )
             {
                MessageBox.Show( koIE.GetType( ) + ":" + koIE.Message );
             }
          }
+      }
+
+      private void mShowStockPriceCancelled( object aoState )
+      {
+         MessageBox.Show( "Show Price Task has been cancelled..." + Environment.NewLine +
+                          "Task was started at: " + aoState.ToString( ) );
       }
 
       private void mShowTime( )
@@ -248,21 +329,22 @@ namespace TPLTest
          {
             try
             {
-               kcpData = koClient.DownloadData( "http://www.nasdaq.com/aspx/infoquotes.aspx?symbol=IBM&selected=IBM" );
-               koPageText = new UTF8Encoding( ).GetString( kcpData );
-               kiPos1 = koPageText.IndexOf( "LastSale1'>" );
-               kiPos2 = koPageText.IndexOf( "</", kiPos1 + 1 );
-               koPrice = koPageText.Substring( kiPos1 + 18, kiPos2 - kiPos1 - 18 );
+               //kcpData = koClient.DownloadData( "https://www.nasdaq.com/aspx/infoquotes.aspx?symbol=IBM&selected=IBM" );
+               //koPageText = new UTF8Encoding( ).GetString( kcpData );
+               //kiPos1 = koPageText.IndexOf( "LastSale1'>" );
+               //kiPos2 = koPageText.IndexOf( "</", kiPos1 + 1 );
+               //koPrice = koPageText.Substring( kiPos1 + 18, kiPos2 - kiPos1 - 18 );
+               koPrice = DateTime.Now.Ticks.ToString( );
                if( this.voStatusStrip.InvokeRequired )
                {
                   this.voStatusStrip.Invoke( this.voDelShowStkP, new string[ ]{ koPrice } );
                }
-               aoToken.WaitHandle.WaitOne( 15000 );
                aoToken.ThrowIfCancellationRequested( );
+               aoToken.WaitHandle.WaitOne( 15000 );
             }
             catch( Exception koException )
             {
-               Console.WriteLine( koException.Message );
+               throw;
             }
          }
       }
