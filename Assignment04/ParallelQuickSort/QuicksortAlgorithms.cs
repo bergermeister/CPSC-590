@@ -16,7 +16,28 @@ namespace ParallelQuickSort
          if( aiRight > aiLeft )
          {
             kiPivot = mPartition( aoData, aiLeft, aiRight );
-            
+            MQuicksort( aoData, aiLeft, kiPivot - 1 );
+            MQuicksort( aoData, kiPivot + 1, aiRight );
+         }
+      }
+
+      public static void MQuicksortParallel< T >( T[ ] aoData, int aiLeft, int aiRight )
+         where T : IComparable< T >
+      {
+         const int xiSequentialThreshold = 1000;
+
+         if( aiRight > aiLeft )
+         {
+            if( ( aiRight - aiLeft ) < xiSequentialThreshold )
+            {
+               MQuicksort( aoData, aiLeft, aiRight );
+            }
+            else
+            {
+               int kiPivot = mPartition( aoData, aiLeft, aiRight );
+               Parallel.Invoke( ( ) => MQuicksortParallel( aoData, aiLeft, kiPivot - 1 ),
+                                ( ) => MQuicksortParallel( aoData, kiPivot + 1, aiRight ) );
+            }
          }
       }
 
@@ -61,7 +82,7 @@ namespace ParallelQuickSort
             }
          }
 
-         aoData[ kiLeft ] = aoData[ kiRight ];
+         aoData[ aiLow ] = aoData[ kiRight ];
          aoData[ kiRight ] = koPivotItem;
 
          return( kiRight );
@@ -69,9 +90,9 @@ namespace ParallelQuickSort
 
       private static void mSwap< T >( T[ ] aoData, int aiI, int aiJ )
       {
-         T kiTemp = aoData[ aiI ];
+         T koTemp = aoData[ aiI ];
          aoData[ aiI ] = aoData[ aiJ ];
-         aoData[ aiJ ] = kiTemp;
+         aoData[ aiJ ] = koTemp;
       }
    }
 }
