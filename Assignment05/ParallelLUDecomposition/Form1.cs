@@ -24,6 +24,23 @@ namespace ParallelLUDecomposition
          Matrix      koM = new Matrix( 4, 4 );
          double      kdErr = 0.0;
          string      koOut = "";
+         int         kiBlockSize;
+
+         //Matrix koA = new Matrix( 3, 3 );
+         //Matrix koB = new Matrix( 3, 3 );
+         //koA[ 0, 0 ] = 1.0; koA[ 0, 1 ] = 2.0; koA[ 0, 2 ] = 3.0;
+         //koA[ 1, 0 ] = 4.0; koA[ 1, 1 ] = 5.0; koA[ 1, 2 ] = 6.0;
+         //koA[ 2, 0 ] = 7.0; koA[ 2, 1 ] = 8.0; koA[ 2, 2 ] = 9.0;
+         //koB[ 0, 0 ] = 7.0; koB[ 0, 1 ] = 9.0; koB[ 0, 2 ] = 8.0;
+         //koB[ 1, 0 ] = 1.0; koB[ 1, 1 ] = 2.0; koB[ 1, 2 ] = 3.0;
+         //koB[ 2, 0 ] = 4.0; koB[ 2, 1 ] = 6.0; koB[ 2, 2 ] = 5.0;
+         //Matrix koR = koA * koB;
+         //MessageBox.Show( koR.ToString( ) );
+
+         if( !Int32.TryParse( this.voTbSize.Text, out kiBlockSize ) )
+         {
+            kiBlockSize = 2;
+         }
 
          /// -# Initialize Matrix
          koM[ 0, 0 ] = 0.50; koM[ 0, 1 ] = 2; koM[ 0, 2 ] = 1.0; koM[ 0, 3 ] =  4.0;
@@ -32,7 +49,8 @@ namespace ParallelLUDecomposition
          koM[ 3, 0 ] = 0.50; koM[ 3, 1 ] = 6; koM[ 3, 2 ] = 6.0; koM[ 3, 3 ] = 19.0;
          
          /// -# Perform LU Decomposition
-         koM.MLUDecompose( kdL, kdU, ref kdErr );
+         koM.MLUDecomposeBlock( kdL, kdU, kiBlockSize, ref kdErr );
+         //koM.MLUDecompose( kdL, kdU, ref kdErr );
 
          /// -# Print the error
          MessageBox.Show( "Error = " + kdErr.ToString( ) );
