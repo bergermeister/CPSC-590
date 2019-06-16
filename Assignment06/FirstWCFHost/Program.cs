@@ -12,7 +12,7 @@ namespace FirstWCFHost
          // to it. Each end point is a unique combination of A B C    
          // A = address,  B = binding i.e., comm. Prot., C = Contract i.e. interface 
  
-         ServiceHost sh = new ServiceHost( typeof( FirstWCFLib.MyMath ) );
+         ServiceHost sh = new ServiceHost( typeof( WCFLibrary.MyMath ) );
          
          // rest of the configuration for exposing end points will come             
          // from WCF Configuration Editor             
