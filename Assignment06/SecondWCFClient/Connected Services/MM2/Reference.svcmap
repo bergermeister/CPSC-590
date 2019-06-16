@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="7a00487e-e829-42a9-a9bc-bb1c2e5d02d4" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:64098/MyMath2.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="MyMath2.disco" MetadataType="Disco" ID="3eaf7e68-7486-424b-8e0b-cf723d359308" SourceId="1" SourceUrl="http://localhost:64098/MyMath2.svc?disco" />
+    <MetadataFile FileName="MyMath2.xsd" MetadataType="Schema" ID="8c10d3ba-be4c-40cf-9e09-4dc41be78826" SourceId="1" SourceUrl="http://localhost:64098/MyMath2.svc?xsd=xsd1" />
+    <MetadataFile FileName="MyMath21.xsd" MetadataType="Schema" ID="73e8f32f-75a6-457e-bf46-9c248d0fd3de" SourceId="1" SourceUrl="http://localhost:64098/MyMath2.svc?xsd=xsd3" />
+    <MetadataFile FileName="MyMath22.xsd" MetadataType="Schema" ID="7e2ea6a5-03c6-4fb0-b9c3-0d07d25cdfa1" SourceId="1" SourceUrl="http://localhost:64098/MyMath2.svc?xsd=xsd2" />
+    <MetadataFile FileName="MyMath2.wsdl" MetadataType="Wsdl" ID="bb244d46-5a60-42f0-a359-48aab0771e7a" SourceId="1" SourceUrl="http://localhost:64098/MyMath2.svc?wsdl" />
+    <MetadataFile FileName="MyMath23.xsd" MetadataType="Schema" ID="20f87138-1e5b-4f19-9c5c-58ef56db3399" SourceId="1" SourceUrl="http://localhost:64098/MyMath2.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

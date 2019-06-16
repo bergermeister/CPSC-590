@@ -11,6 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstWCFClient", "FirstWCFC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondWCF", "SecondWCF\SecondWCF.csproj", "{CA00C7E6-9085-41A7-8962-468486B63F38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondWCFClient", "SecondWCFClient\SecondWCFClient.csproj", "{7125A21D-DA6F-4B4E-96F6-6304E00AD228}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA00C7E6-9085-41A7-8962-468486B63F38} = {CA00C7E6-9085-41A7-8962-468486B63F38}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +38,10 @@ Global
 		{CA00C7E6-9085-41A7-8962-468486B63F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA00C7E6-9085-41A7-8962-468486B63F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA00C7E6-9085-41A7-8962-468486B63F38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7125A21D-DA6F-4B4E-96F6-6304E00AD228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7125A21D-DA6F-4B4E-96F6-6304E00AD228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7125A21D-DA6F-4B4E-96F6-6304E00AD228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7125A21D-DA6F-4B4E-96F6-6304E00AD228}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
