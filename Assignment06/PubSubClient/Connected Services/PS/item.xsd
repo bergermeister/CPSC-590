@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/PubSubLib" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/PubSubLib" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ComputeResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ClientID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Result" type="xs:double" />
+      <xs:element minOccurs="0" name="ResultTime" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ComputeResult" nillable="true" type="tns:ComputeResult" />
+</xs:schema>
