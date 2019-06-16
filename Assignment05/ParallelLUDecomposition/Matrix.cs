@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ParallelLUDecomposition
@@ -44,105 +42,158 @@ namespace ParallelLUDecomposition
 
       public void MLUDecomposeBlock( double[ , ] adL, double[ , ] adU, int aiSize, ref double adError )
       {
-         int         kiCount = this.viRows / aiSize;
-         int         kiBr;
-         int         kiBc;
-         double[ , ] kdRes   = new double[ this.viRows, this.viRows ];
-         Matrix[ , ] koBlock = new Matrix[ kiCount, kiCount ];
+         int            kiCount = this.viRows / aiSize;
+         double[ , ]    kdRes   = new double[ this.viRows, this.viRows ];
+         Block[ , ]     koBlock = new Block[ kiCount, kiCount ];
+         Task[ , ]      koTask  = new Task[ kiCount, kiCount ];
+         Semaphore[ , ] koSem   = new Semaphore[ kiCount, kiCount ];
 
          adError = 0.0;
 
          /// -# Break the matrix into blocks
          for( int kiI = 0; kiI < kiCount; kiI++ )
          {
-            kiBr = kiI * aiSize;
-            for( int kiJ = 0; kiJ < kiCount; kiJ++ )
+            koSem  [ kiI, kiI ] = new Semaphore( 0, 2 * kiCount );
+            koBlock[ kiI, kiI ] = new Block( this.vdData, adL, adU, kiI * aiSize, kiI * aiSize, aiSize, kiI, kiI );
+            koTask [ kiI, kiI ] = new Task( ( aoBlock ) =>
             {
-               kiBc = kiJ * aiSize;
-               koBlock[ kiI, kiJ ] = new Matrix( aiSize, aiSize );
-               for( int kiR = 0; kiR < aiSize; kiR++ )
+               Block koB = ( Block )aoBlock;
+               if( koB.ViI > 0 )
                {
-                  for( int kiC = 0; kiC < aiSize; kiC++ )
-                  {
-                     koBlock[ kiI, kiJ ].vdData[ kiR, kiC ] = this.vdData[ kiBr + kiR, kiBc + kiC ];
-                  }
+                  koSem[ koB.ViI - 1, koB.ViI ].WaitOne( );
+                  koSem[ koB.ViI, koB.ViI - 1 ].WaitOne( );
                }
+               ( ( Block )aoBlock ).MDecompose( koBlock );
+               koSem[ koB.ViI, koB.ViI ].Release( 2 * kiCount );
+            }, koBlock[ kiI, kiI ] );
+            for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
+            {
+               koSem  [ kiI, kiJ ] = new Semaphore( 0, 1 );
+               koBlock[ kiI, kiJ ] = new Block( this.vdData, adL, adU, kiI * aiSize, kiJ * aiSize, aiSize, kiI, kiJ );
+               koTask[ kiI, kiJ ] = new Task( ( aoBlock ) =>
+               {
+                  Block koB = ( Block )aoBlock;
+                  koSem[ koB.ViI, koB.ViI ].WaitOne( );
+                  ( ( Block )aoBlock ).MComputeU( koBlock );
+                  koSem[ koB.ViI, koB.ViJ ].Release( );
+               }, koBlock[ kiI, kiJ ] );
+
+               koSem  [ kiJ, kiI ] = new Semaphore( 0, 1 );
+               koBlock[ kiJ, kiI ] = new Block( this.vdData, adL, adU, kiJ * aiSize, kiI * aiSize, aiSize, kiJ, kiI );
+               koTask[ kiJ, kiI ] = new Task( ( aoBlock ) =>
+               {
+                  Block koB = ( Block )aoBlock;
+                  koSem[ koB.ViJ, koB.ViJ ].WaitOne( );
+                  ( ( Block )aoBlock ).MComputeL( koBlock );
+                  koSem[ koB.ViI, koB.ViJ ].Release( );
+               }, koBlock[ kiJ, kiI ] );
             }
          }
 
-         Matrix koA;
-         Matrix koLii = new Matrix( aiSize, aiSize );
-         Matrix koUii = new Matrix( aiSize, aiSize );
-         Matrix koAi0 = new Matrix( aiSize, aiSize );
-         Matrix koA0i = new Matrix( aiSize, aiSize );
-         Task< Matrix >[ ] koTaskL = new Task< Matrix >[ kiCount - 1 ];
-         Task< Matrix >[ ] koTaskU = new Task< Matrix >[ kiCount - 1 ];
          for( int kiI = 0; kiI < kiCount; kiI++ )
          {
-            /// -# On the first iteration work on Aii, all other iterations calculate Aii'
-            if( kiI == 0 )
+            koTask[ kiI, kiI ].Start( );
+            for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
             {
-               koA = koBlock[ kiI, kiI ];
-            }
-            else
-            {
-               //koA = koBlock[ kiI, kiI ] - ( koLi0 * koU0i );
-               koA = koBlock[ kiI, kiI ] - ( koTaskL[ kiI - 1 ].Result * koTaskU[ kiI - 1 ].Result );
-            }
-
-            /// -# Break Aii into Lii and Uii
-            koA.MLUDecompose( koLii.vdData, koUii.vdData );
-
-            // Copy the data out
-            for( int kiM = 0; kiM < aiSize; kiM++ )
-            {
-               for( int kiN = 0; kiN < aiSize; kiN++ )
-               {
-                  adL[ ( kiI * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koLii[ kiM, kiN ];
-                  adU[ ( kiI * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koUii[ kiM, kiN ];
-                  this.vdData[ ( kiI * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koA[ kiM, kiN ];
-               }
-            }
-
-            if( kiI < ( kiCount - 1 ) )
-            {
-               /// -# Compute U0i and Li0 in parallel
-               for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
-               {  
-                  /// -# Compute Li0 = Ai0 * Uii^-1
-                  koTaskL[ kiJ - 1 ] = Task.Factory.StartNew< Matrix >( ( aiJ ) =>
-                  {
-                     return( koBlock[ ( int )aiJ, kiI ] * koUii.MInverse( ) );
-                  }, kiJ );
-
-                  /// -# Compute U0i = Lii^-1 * A0i
-                  koTaskU[ kiJ - 1 ] = Task.Factory.StartNew< Matrix >( ( aiJ ) =>
-                  {
-                     return(  koLii.MInverse( ) * koBlock[ kiI, ( int )aiJ ] );
-                  }, kiJ ); 
-               }
-               Task.WaitAll( koTaskL );
-               Task.WaitAll( koTaskU );
-
-               // Copy the data out
-               for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
-               { 
-                  koAi0 = koBlock[ kiJ, kiI ] + ( koTaskL[ kiJ - 1 ].Result * koUii ); 
-                  koA0i = koBlock[ kiI, kiJ ] + ( koLii * koTaskU[ kiJ - 1 ].Result );
-
-                  for( int kiM = 0; kiM < aiSize; kiM++ )
-                  {
-                     for( int kiN = 0; kiN < aiSize; kiN++ )
-                     {
-                        adL[ ( kiJ * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koTaskL[ kiJ - 1 ].Result[ kiM, kiN ];
-                        adU[ ( kiI * aiSize ) + kiM, ( kiJ * aiSize ) + kiN ] = koTaskU[ kiJ - 1 ].Result[ kiM, kiN ];
-                        this.vdData[ ( ( kiJ ) * aiSize ) + kiM, ( ( kiI ) * aiSize ) + kiN ] = koAi0[ kiM, kiN ];
-                        this.vdData[ ( ( kiI ) * aiSize ) + kiM, ( ( kiJ ) * aiSize ) + kiN ] = koA0i[ kiM, kiN ];
-                     }
-                  }
-               }
+               koTask[ kiI, kiJ ].Start( );
+               koTask[ kiJ, kiI ].Start( );
             }
          }
+
+         koTask[ kiCount - 1, kiCount - 1 ].Wait( );
+
+         //for( int kiI = 0; kiI < kiCount; kiI++ )
+         //{
+         //   Task koTaskA = new Task( ( aoBlock ) =>
+         //   {
+         //      koBlock[ kiI, kiI ].MDecompose( ( Block[ , ] )aoBlock );
+         //   }, koBlock );
+         //   koTaskA.Start( );
+         //   koTaskA.Wait( );
+         //   for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
+         //   {
+         //      Task koTaskL = new Task( ( aoBlock ) => { koBlock[ kiJ, kiI ].MComputeL( ( Block[ , ] )aoBlock ); }, koBlock );
+         //      Task koTaskU = new Task( ( aoBlock ) => { koBlock[ kiI, kiJ ].MComputeU( ( Block[ , ] )aoBlock ); }, koBlock );
+         //      koTaskL.Start( );
+         //      koTaskU.Start( );              
+         //      koTaskL.Wait( );
+         //      koTaskU.Wait( );
+         //   }
+         //}
+
+         //Matrix koA;
+         //Matrix koLii = new Matrix( aiSize, aiSize );
+         //Matrix koUii = new Matrix( aiSize, aiSize );
+         //Matrix koAi0 = new Matrix( aiSize, aiSize );
+         //Matrix koA0i = new Matrix( aiSize, aiSize );
+         //Task< Matrix >[ ] koTaskL = new Task< Matrix >[ kiCount - 1 ];
+         //Task< Matrix >[ ] koTaskU = new Task< Matrix >[ kiCount - 1 ];
+         //for( int kiI = 0; kiI < kiCount; kiI++ )
+         //{
+         //   /// -# On the first iteration work on Aii, all other iterations calculate Aii'
+         //   if( kiI == 0 )
+         //   {
+         //      koA = koBlock[ kiI, kiI ];
+         //   }
+         //   else
+         //   {
+         //      //koA = koBlock[ kiI, kiI ] - ( koLi0 * koU0i );
+         //      koA = koBlock[ kiI, kiI ] - ( koTaskL[ kiI - 1 ].Result * koTaskU[ kiI - 1 ].Result );
+         //   }
+         //
+         //   /// -# Break Aii into Lii and Uii
+         //   koA.MLUDecompose( koLii.vdData, koUii.vdData );
+         //
+         //   // Copy the data out
+         //   for( int kiM = 0; kiM < aiSize; kiM++ )
+         //   {
+         //      for( int kiN = 0; kiN < aiSize; kiN++ )
+         //      {
+         //         adL[ ( kiI * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koLii[ kiM, kiN ];
+         //         adU[ ( kiI * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koUii[ kiM, kiN ];
+         //         this.vdData[ ( kiI * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koA[ kiM, kiN ];
+         //      }
+         //   }
+         //
+         //   if( kiI < ( kiCount - 1 ) )
+         //   {
+         //      /// -# Compute U0i and Li0 in parallel
+         //      for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
+         //      {  
+         //         /// -# Compute Li0 = Ai0 * Uii^-1
+         //         koTaskL[ kiJ - 1 ] = Task.Factory.StartNew< Matrix >( ( aiJ ) =>
+         //         {
+         //            return( koBlock[ ( int )aiJ, kiI ] * koUii.MInverse( ) );
+         //         }, kiJ );
+         //
+         //         /// -# Compute U0i = Lii^-1 * A0i
+         //         koTaskU[ kiJ - 1 ] = Task.Factory.StartNew< Matrix >( ( aiJ ) =>
+         //         {
+         //            return(  koLii.MInverse( ) * koBlock[ kiI, ( int )aiJ ] );
+         //         }, kiJ ); 
+         //      }
+         //      Task.WaitAll( koTaskL );
+         //      Task.WaitAll( koTaskU );
+         //
+         //      // Copy the data out
+         //      for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
+         //      { 
+         //         koAi0 = koBlock[ kiJ, kiI ] + ( koTaskL[ kiJ - 1 ].Result * koUii ); 
+         //         koA0i = koBlock[ kiI, kiJ ] + ( koLii * koTaskU[ kiJ - 1 ].Result );
+         //
+         //         for( int kiM = 0; kiM < aiSize; kiM++ )
+         //         {
+         //            for( int kiN = 0; kiN < aiSize; kiN++ )
+         //            {
+         //               adL[ ( kiJ * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koTaskL[ kiJ - 1 ].Result[ kiM, kiN ];
+         //               adU[ ( kiI * aiSize ) + kiM, ( kiJ * aiSize ) + kiN ] = koTaskU[ kiJ - 1 ].Result[ kiM, kiN ];
+         //               this.vdData[ ( ( kiJ ) * aiSize ) + kiM, ( ( kiI ) * aiSize ) + kiN ] = koAi0[ kiM, kiN ];
+         //               this.vdData[ ( ( kiI ) * aiSize ) + kiM, ( ( kiJ ) * aiSize ) + kiN ] = koA0i[ kiM, kiN ];
+         //            }
+         //         }
+         //      }
+         //   }
+         //}
 
          // verify if LU decomp is correct
          for( int kiI = 0; kiI < this.viRows; kiI++ )
@@ -287,75 +338,7 @@ namespace ParallelLUDecomposition
          }
 
          return( koInv );
-         /*
-         int dimension = this.viRows;
-			int count = this.viCols;
-		
-			Matrix B = Matrix.MDiagonal( this.viRows, 1.0 );
-			double[,] l = this.vdData;
-		
-			// Solve L*Y = B;
-			for (int k = 0; k < this.viRows; k++)
-			{
-				for (int i = k + 1; i < dimension; i++) 
-					for (int j = 0; j < count; j++)
-						B[i,j] -= B[k,j] * l[i,k];
-		
-				for (int j = 0; j < count; j++) 
-					B[k,j] /= l[k,k];
-			}
-		
-			// Solve L'*X = Y;
-			for (int k = dimension - 1; k >= 0; k--)
-			{
-				for (int j = 0; j < count; j++)
-					B[k,j] /= l[k,k];
-					
-				for (int i = 0; i < k; i++)
-					for (int j = 0; j < count; j++)
-						B[i,j] -= B[k,j] * l[k,i];
-			}
-		
-			return B;
-         /*
-         Matrix koB = Matrix.MDiagonal( this.viRows, 1.0 );
-		
-         // Solve L*Y = B;
-         for( int kiK = 0; kiK < this.viRows; kiK++ )
-         {
-            for( int kiI = kiK + 1; kiI < this.viRows; kiI++ )
-            {
-		         for( int kiJ = 0; kiJ < this.viRows; kiJ++ )
-               {
-			         koB[ kiI, kiJ ] -= koB[ kiK, kiJ ] * this.vdData[ kiI, kiK ];
-               }
-            }
-
-	         for( int kiJ = 0; kiJ < this.viRows; kiJ++ )
-            {
-		         koB[ kiK, kiJ ] /= this.vdData[ kiK, kiK ];
-            }
-         }
-		
-         // Solve L'*X = Y;
-         for( int kiK = ( this.viRows - 1 ); kiK >= 0; kiK-- )
-         {
-	         for( int kiJ = 0; kiJ < this.viRows; kiJ++ )
-            {
-		         koB[ kiK, kiJ ] /= this.vdData[ kiK, kiK ];
-            }	
-	         for( int kiI = 0; kiI < kiK; kiI++ )
-            {
-		         for( int kiJ = 0; kiJ < this.viRows; kiJ++ )
-               {
-			         koB[ kiI, kiJ ] -= koB[ kiK, kiJ ] * this.vdData[ kiK, kiI ];
-               }
-            }
-         }
-
-         return( koB );
-         //*/
-		}
+      }
 
       public override string ToString()
       {
