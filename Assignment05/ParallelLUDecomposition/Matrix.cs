@@ -102,99 +102,6 @@ namespace ParallelLUDecomposition
 
          koTask[ kiCount - 1, kiCount - 1 ].Wait( );
 
-         //for( int kiI = 0; kiI < kiCount; kiI++ )
-         //{
-         //   Task koTaskA = new Task( ( aoBlock ) =>
-         //   {
-         //      koBlock[ kiI, kiI ].MDecompose( ( Block[ , ] )aoBlock );
-         //   }, koBlock );
-         //   koTaskA.Start( );
-         //   koTaskA.Wait( );
-         //   for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
-         //   {
-         //      Task koTaskL = new Task( ( aoBlock ) => { koBlock[ kiJ, kiI ].MComputeL( ( Block[ , ] )aoBlock ); }, koBlock );
-         //      Task koTaskU = new Task( ( aoBlock ) => { koBlock[ kiI, kiJ ].MComputeU( ( Block[ , ] )aoBlock ); }, koBlock );
-         //      koTaskL.Start( );
-         //      koTaskU.Start( );              
-         //      koTaskL.Wait( );
-         //      koTaskU.Wait( );
-         //   }
-         //}
-
-         //Matrix koA;
-         //Matrix koLii = new Matrix( aiSize, aiSize );
-         //Matrix koUii = new Matrix( aiSize, aiSize );
-         //Matrix koAi0 = new Matrix( aiSize, aiSize );
-         //Matrix koA0i = new Matrix( aiSize, aiSize );
-         //Task< Matrix >[ ] koTaskL = new Task< Matrix >[ kiCount - 1 ];
-         //Task< Matrix >[ ] koTaskU = new Task< Matrix >[ kiCount - 1 ];
-         //for( int kiI = 0; kiI < kiCount; kiI++ )
-         //{
-         //   /// -# On the first iteration work on Aii, all other iterations calculate Aii'
-         //   if( kiI == 0 )
-         //   {
-         //      koA = koBlock[ kiI, kiI ];
-         //   }
-         //   else
-         //   {
-         //      //koA = koBlock[ kiI, kiI ] - ( koLi0 * koU0i );
-         //      koA = koBlock[ kiI, kiI ] - ( koTaskL[ kiI - 1 ].Result * koTaskU[ kiI - 1 ].Result );
-         //   }
-         //
-         //   /// -# Break Aii into Lii and Uii
-         //   koA.MLUDecompose( koLii.vdData, koUii.vdData );
-         //
-         //   // Copy the data out
-         //   for( int kiM = 0; kiM < aiSize; kiM++ )
-         //   {
-         //      for( int kiN = 0; kiN < aiSize; kiN++ )
-         //      {
-         //         adL[ ( kiI * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koLii[ kiM, kiN ];
-         //         adU[ ( kiI * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koUii[ kiM, kiN ];
-         //         this.vdData[ ( kiI * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koA[ kiM, kiN ];
-         //      }
-         //   }
-         //
-         //   if( kiI < ( kiCount - 1 ) )
-         //   {
-         //      /// -# Compute U0i and Li0 in parallel
-         //      for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
-         //      {  
-         //         /// -# Compute Li0 = Ai0 * Uii^-1
-         //         koTaskL[ kiJ - 1 ] = Task.Factory.StartNew< Matrix >( ( aiJ ) =>
-         //         {
-         //            return( koBlock[ ( int )aiJ, kiI ] * koUii.MInverse( ) );
-         //         }, kiJ );
-         //
-         //         /// -# Compute U0i = Lii^-1 * A0i
-         //         koTaskU[ kiJ - 1 ] = Task.Factory.StartNew< Matrix >( ( aiJ ) =>
-         //         {
-         //            return(  koLii.MInverse( ) * koBlock[ kiI, ( int )aiJ ] );
-         //         }, kiJ ); 
-         //      }
-         //      Task.WaitAll( koTaskL );
-         //      Task.WaitAll( koTaskU );
-         //
-         //      // Copy the data out
-         //      for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
-         //      { 
-         //         koAi0 = koBlock[ kiJ, kiI ] + ( koTaskL[ kiJ - 1 ].Result * koUii ); 
-         //         koA0i = koBlock[ kiI, kiJ ] + ( koLii * koTaskU[ kiJ - 1 ].Result );
-         //
-         //         for( int kiM = 0; kiM < aiSize; kiM++ )
-         //         {
-         //            for( int kiN = 0; kiN < aiSize; kiN++ )
-         //            {
-         //               adL[ ( kiJ * aiSize ) + kiM, ( kiI * aiSize ) + kiN ] = koTaskL[ kiJ - 1 ].Result[ kiM, kiN ];
-         //               adU[ ( kiI * aiSize ) + kiM, ( kiJ * aiSize ) + kiN ] = koTaskU[ kiJ - 1 ].Result[ kiM, kiN ];
-         //               this.vdData[ ( ( kiJ ) * aiSize ) + kiM, ( ( kiI ) * aiSize ) + kiN ] = koAi0[ kiM, kiN ];
-         //               this.vdData[ ( ( kiI ) * aiSize ) + kiM, ( ( kiJ ) * aiSize ) + kiN ] = koA0i[ kiM, kiN ];
-         //            }
-         //         }
-         //      }
-         //   }
-         //}
-
          // verify if LU decomp is correct
          for( int kiI = 0; kiI < this.viRows; kiI++ )
          {
@@ -243,7 +150,14 @@ namespace ParallelLUDecomposition
                }
                else
                {
-                  adL[ kiI, kiK ] = this.vdData[ kiI, kiK ] / adU[ kiK, kiK ];
+                  if( adU[ kiK, kiK ] > 0.000001 )
+                  {
+                     adL[ kiI, kiK ] = this.vdData[ kiI, kiK ] / adU[ kiK, kiK ];
+                  }
+                  else
+                  {
+                     adL[ kiI, kiK ] = this.vdData[ kiI, kiK ] / 0.000001;
+                  }
                }
             }
             for( int kiI = kiK + 1; kiI < this.viRows; kiI++ )
