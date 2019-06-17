@@ -8,4 +8,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ComputeResult" nillable="true" type="tns:ComputeResult" />
+  <xs:complexType name="StockInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Price" type="xs:double" />
+      <xs:element minOccurs="0" name="STime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Symbol" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="StockInfo" nillable="true" type="tns:StockInfo" />
 </xs:schema>

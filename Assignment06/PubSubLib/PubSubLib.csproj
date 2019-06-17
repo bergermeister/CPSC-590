@@ -46,8 +46,11 @@
   <ItemGroup>
     <Compile Include="ComputeResult.cs" />
     <Compile Include="ILongCompute.cs" />
+    <Compile Include="IPriceChange.cs" />
+    <Compile Include="IStocks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PubSub.cs" />
+    <Compile Include="StockInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

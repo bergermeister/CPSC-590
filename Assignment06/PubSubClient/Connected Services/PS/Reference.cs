@@ -90,6 +90,83 @@ namespace PubSubClient.PS {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StockInfo", Namespace="http://schemas.datacontract.org/2004/07/PubSubLib")]
+    [System.SerializableAttribute()]
+    public partial class StockInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private double PriceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime STimeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SymbolField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public double Price {
+            get {
+                return this.PriceField;
+            }
+            set {
+                if ((this.PriceField.Equals(value) != true)) {
+                    this.PriceField = value;
+                    this.RaisePropertyChanged("Price");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime STime {
+            get {
+                return this.STimeField;
+            }
+            set {
+                if ((this.STimeField.Equals(value) != true)) {
+                    this.STimeField = value;
+                    this.RaisePropertyChanged("STime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Symbol {
+            get {
+                return this.SymbolField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SymbolField, value) != true)) {
+                    this.SymbolField = value;
+                    this.RaisePropertyChanged("Symbol");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PS.ILongCompute", CallbackContract=typeof(PubSubClient.PS.ILongComputeCallback))]
     public interface ILongCompute {
@@ -142,6 +219,122 @@ namespace PubSubClient.PS {
         
         public System.Threading.Tasks.Task ComputeAsync(int a, int b, string clientId) {
             return base.Channel.ComputeAsync(a, b, clientId);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PS.IStocks", CallbackContract=typeof(PubSubClient.PS.IStocksCallback))]
+    public interface IStocks {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStocks/SubscribeToStockPrice", ReplyAction="http://tempuri.org/IStocks/SubscribeToStockPriceResponse")]
+        bool SubscribeToStockPrice(string stocksym, double triggerPrice);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStocks/SubscribeToStockPrice", ReplyAction="http://tempuri.org/IStocks/SubscribeToStockPriceResponse")]
+        System.Threading.Tasks.Task<bool> SubscribeToStockPriceAsync(string stocksym, double triggerPrice);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStocks/UnsubscribeToStockPrice", ReplyAction="http://tempuri.org/IStocks/UnsubscribeToStockPriceResponse")]
+        bool UnsubscribeToStockPrice(string stocksym);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IStocks/UnsubscribeToStockPrice", ReplyAction="http://tempuri.org/IStocks/UnsubscribeToStockPriceResponse")]
+        System.Threading.Tasks.Task<bool> UnsubscribeToStockPriceAsync(string stocksym);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IStocksCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IStocks/OnPriceChange")]
+        void OnPriceChange(PubSubClient.PS.StockInfo sinfo);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IStocksChannel : PubSubClient.PS.IStocks, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class StocksClient : System.ServiceModel.DuplexClientBase<PubSubClient.PS.IStocks>, PubSubClient.PS.IStocks {
+        
+        public StocksClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
+        }
+        
+        public StocksClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
+        }
+        
+        public StocksClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public StocksClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        }
+        
+        public StocksClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public bool SubscribeToStockPrice(string stocksym, double triggerPrice) {
+            return base.Channel.SubscribeToStockPrice(stocksym, triggerPrice);
+        }
+        
+        public System.Threading.Tasks.Task<bool> SubscribeToStockPriceAsync(string stocksym, double triggerPrice) {
+            return base.Channel.SubscribeToStockPriceAsync(stocksym, triggerPrice);
+        }
+        
+        public bool UnsubscribeToStockPrice(string stocksym) {
+            return base.Channel.UnsubscribeToStockPrice(stocksym);
+        }
+        
+        public System.Threading.Tasks.Task<bool> UnsubscribeToStockPriceAsync(string stocksym) {
+            return base.Channel.UnsubscribeToStockPriceAsync(stocksym);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PS.IPriceChange")]
+    public interface IPriceChange {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPriceChange/ChangeStockPrice", ReplyAction="http://tempuri.org/IPriceChange/ChangeStockPriceResponse")]
+        bool ChangeStockPrice(string symbol, double newprice);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPriceChange/ChangeStockPrice", ReplyAction="http://tempuri.org/IPriceChange/ChangeStockPriceResponse")]
+        System.Threading.Tasks.Task<bool> ChangeStockPriceAsync(string symbol, double newprice);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IPriceChangeChannel : PubSubClient.PS.IPriceChange, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class PriceChangeClient : System.ServiceModel.ClientBase<PubSubClient.PS.IPriceChange>, PubSubClient.PS.IPriceChange {
+        
+        public PriceChangeClient() {
+        }
+        
+        public PriceChangeClient(string endpointConfigurationName) : 
+                base(endpointConfigurationName) {
+        }
+        
+        public PriceChangeClient(string endpointConfigurationName, string remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public PriceChangeClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public PriceChangeClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(binding, remoteAddress) {
+        }
+        
+        public bool ChangeStockPrice(string symbol, double newprice) {
+            return base.Channel.ChangeStockPrice(symbol, newprice);
+        }
+        
+        public System.Threading.Tasks.Task<bool> ChangeStockPriceAsync(string symbol, double newprice) {
+            return base.Channel.ChangeStockPriceAsync(symbol, newprice);
         }
     }
 }
