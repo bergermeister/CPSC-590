@@ -34,9 +34,10 @@
          // 
          // voBtnTestMyMath
          // 
-         this.voBtnTestMyMath.Location = new System.Drawing.Point(32, 37);
+         this.voBtnTestMyMath.Location = new System.Drawing.Point(11, 11);
+         this.voBtnTestMyMath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
          this.voBtnTestMyMath.Name = "voBtnTestMyMath";
-         this.voBtnTestMyMath.Size = new System.Drawing.Size(152, 28);
+         this.voBtnTestMyMath.Size = new System.Drawing.Size(124, 27);
          this.voBtnTestMyMath.TabIndex = 0;
          this.voBtnTestMyMath.Text = "Test WCF MyMath";
          this.voBtnTestMyMath.UseVisualStyleBackColor = true;
@@ -44,9 +45,10 @@
          // 
          // voBtnTestProxy
          // 
-         this.voBtnTestProxy.Location = new System.Drawing.Point(32, 84);
+         this.voBtnTestProxy.Location = new System.Drawing.Point(11, 42);
+         this.voBtnTestProxy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
          this.voBtnTestProxy.Name = "voBtnTestProxy";
-         this.voBtnTestProxy.Size = new System.Drawing.Size(152, 28);
+         this.voBtnTestProxy.Size = new System.Drawing.Size(124, 32);
          this.voBtnTestProxy.TabIndex = 1;
          this.voBtnTestProxy.Text = "Test WCF Via Proxy";
          this.voBtnTestProxy.UseVisualStyleBackColor = true;
@@ -54,11 +56,12 @@
          // 
          // Form1
          // 
-         this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(800, 450);
+         this.ClientSize = new System.Drawing.Size(181, 274);
          this.Controls.Add(this.voBtnTestProxy);
          this.Controls.Add(this.voBtnTestMyMath);
+         this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
          this.Name = "Form1";
          this.Text = "Form1";
          this.ResumeLayout(false);
