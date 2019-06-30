@@ -222,7 +222,7 @@ namespace GMM
         {
             int k = int.Parse(txtNumClusters.Text);   // number of clusters
             int dim = 3; // number of dimensions for data
-            Bitmap koBmp = new Bitmap( @"C:\Users\edwar\Downloads\TennisImages\33242453-Tennis-ball-on-a-tennis-clay-court-Stock-Photo.jpg" );
+            Bitmap koBmp = new Bitmap( @"..\..\Resources\tennis1.jpg" );
             Matrix X = new Matrix( koBmp.Height * koBmp.Width, 3 );
 
             for( int i = 0; i < koBmp.Height; i++ )
@@ -230,9 +230,9 @@ namespace GMM
                for( int j = 0; j < koBmp.Width; j++ )
                {
                   Color koC = koBmp.GetPixel( j, i );
-                  X[i, 0] = koC.R;
-                  X[i, 1] = koC.G;
-                  X[i, 2] = koC.B; 
+                  X[ ( i * koBmp.Width ) + j, 0] = koC.R;
+                  X[ ( i * koBmp.Width ) + j, 1] = koC.G;
+                  X[ ( i * koBmp.Width ) + j, 2] = koC.B; 
                }
             }
 
@@ -241,6 +241,7 @@ namespace GMM
 
             // determine class membership i.e., which point belongs to which cluster
             List< MyPoint > PList = new List<MyPoint>();
+            int x = 0, y = 0;
             for (int i = 0; i < X.Rows; i++)
             {
                 // Gamma matrix has the probabilities for a data point for its membership in each cluster
@@ -255,8 +256,14 @@ namespace GMM
                         maxprobab = gmmnd.Gamma[i, m];
                     }
                 }
-                MyPoint pt = new MyPoint { ClusterId = cnum, X = X[i, 0], Y = X[i, 1] };
+                MyPoint pt = new MyPoint { ClusterId = cnum, X = x, Y = y };
                 PList.Add(pt);
+                x++;
+                if( x >= koBmp.Width )
+                {
+                  x = 0;
+                  y++;
+                }
             }
             MyImageProc.DrawClusters(pic1, PList, 1, k);
         }

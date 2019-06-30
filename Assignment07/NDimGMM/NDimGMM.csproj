@@ -84,5 +84,10 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\33242453-Tennis-ball-on-a-tennis-clay-court-Stock-Photo.jpg" />
+    <Content Include="Resources\tennis1.jpg" />
+    <Content Include="Resources\tennis2.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

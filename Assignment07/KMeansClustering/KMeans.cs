@@ -97,12 +97,11 @@ namespace KMeansClustering
          List< ClusterCenterPoint > koCListNew = null;
          ClusterCenterPoint         koCPNew;
          double kdError = double.MaxValue;      
-         double kdErr;
-         double kdPrevDist;
-         double kdDist;
+         double kdErr = 0;
+         
          int    kiIteration = 0; 
-         int    kiK;
-         int    kiKnew;
+         
+         
          int    kiC0Count;
          int    kiC1Count;
          int    kiC2Count;
@@ -115,29 +114,9 @@ namespace KMeansClustering
  
          while( ( kiIteration < aiMaxIterations ) || ( kdError < adMaxError ) )
          {
-            // determine which clusetr each point belongs to
-            foreach( MyPoint koP in aoPList )
-            {
-               // determine which cluster it belongs to
-               kiK = 0;
-               kdPrevDist = double.MaxValue;
-               foreach( ClusterCenterPoint koCP in koCList )
-               {
-                  kdDist = MFindDistance( koP.VdX, koP.VdY, koCP.VdCx, koCP.VdCy );
-                  if( kdDist < kdPrevDist )
-                  {
-                     kdPrevDist = kdDist;
-                     koP.ViClusterId = kiK;
-                  }
-                  kiK++;
-               }
-            } 
- 
-            kiC0Count = ( from koP in aoPList where koP.ViClusterId == 0 select koP ).ToList< MyPoint >( ).Count;
-            kiC1Count = ( from koP in aoPList where koP.ViClusterId == 1 select koP ).ToList< MyPoint >( ).Count; 
-            kiC2Count = ( from koP in aoPList where koP.ViClusterId == 2 select koP ).ToList< MyPoint >( ).Count; 
+            Task    koFinal;
+            Task[ ] koTask = new Task[ aoPList.Count ];
 
-            // ---------------Recompute cluster centers-------------------
             koCListNew = new List<ClusterCenterPoint>();
             kiCCount = new int[ koCList.Count ]; 
             foreach( ClusterCenterPoint koCP in koCList )
@@ -146,27 +125,59 @@ namespace KMeansClustering
                koCListNew.Add( koCPNew );                     
                koCPNew.VdCx = 0;                     
                koCPNew.VdCy = 0;                 
-            }                 
-            foreach( MyPoint koP in aoPList )                
-            {                     
-               koCListNew[ koP.ViClusterId ].VdCx += koP.VdX;                     
-               koCListNew[ koP.ViClusterId ].VdCy += koP.VdY;                    
-               kiCCount[ koP.ViClusterId ]++;                 
-            }                 
-            kiKnew = 0;                 
-            foreach( ClusterCenterPoint koCP in koCListNew )                 
-            {                     
-               koCP.VdCx = koCP.VdCx / kiCCount[ kiKnew ];                     
-               koCP.VdCy = koCP.VdCy / kiCCount[ kiKnew ];                     
-               kiKnew++;                 
+            }   
+
+            for( int i = 0; i < aoPList.Count; i++ )
+            {
+               koTask[ i ] = Task.Factory.StartNew( ( aoP ) =>
+               {
+                  MyPoint koP        = ( MyPoint )aoP;
+                  int     kiK        = 0;
+                  double  kdPrevDist = double.MaxValue;
+                  double  kdDist;
+                  
+                  foreach( ClusterCenterPoint koCP in koCList )
+                  {
+                     kdDist = MFindDistance( koP.VdX, koP.VdY, koCP.VdCx, koCP.VdCy );
+                     if( kdDist < kdPrevDist )
+                     {
+                        kdPrevDist = kdDist;
+                        koP.ViClusterId = kiK;
+                     }
+                     kiK++;
+                  }
+
+                  koCListNew[ koP.ViClusterId ].VdCx += koP.VdX;                     
+                  koCListNew[ koP.ViClusterId ].VdCy += koP.VdY;                    
+                  kiCCount[ koP.ViClusterId ]++;           
+               }, aoPList[ i ] );
             }
-            //------------------end recompute cluster centers----------------- 
+
+            koFinal = Task.Factory.ContinueWhenAll( koTask, ( aoTask ) =>
+            {
+               // ---------------Recompute cluster centers------------------- 
+               int kiKnew = 0;                 
+               foreach( ClusterCenterPoint koCP in koCListNew )                 
+               {                     
+                  koCP.VdCx = koCP.VdCx / kiCCount[ kiKnew ];                     
+                  koCP.VdCy = koCP.VdCy / kiCCount[ kiKnew ];                     
+                  kiKnew++;                 
+               }
+               //------------------end recompute cluster centers----------------- 
  
-            //---------------see if new centers are different from previous---                 
-            kdErr = 0;                 
-            for( int i = 0; i < koCList.Count; i++ )                     
-               kdErr += ( ( koCListNew[ i ].VdCx - koCList[ i ].VdCx ) * ( koCListNew[ i ].VdCx - koCList[ i ].VdCx ) +
-                          ( koCListNew[ i ].VdCy - koCList[ i ].VdCy ) * ( koCListNew[ i ].VdCy - koCList[ i ].VdCy ) );                 
+               //---------------see if new centers are different from previous---                 
+               kdErr = 0;                 
+               for( int i = 0; i < koCList.Count; i++ )                     
+                  kdErr += ( ( koCListNew[ i ].VdCx - koCList[ i ].VdCx ) * ( koCListNew[ i ].VdCx - koCList[ i ].VdCx ) +
+                             ( koCListNew[ i ].VdCy - koCList[ i ].VdCy ) * ( koCListNew[ i ].VdCy - koCList[ i ].VdCy ) );    
+            } );
+
+            // determine which cluster each point belongs to
+ 
+            kiC0Count = ( from koP in aoPList where koP.ViClusterId == 0 select koP ).ToList< MyPoint >( ).Count;
+            kiC1Count = ( from koP in aoPList where koP.ViClusterId == 1 select koP ).ToList< MyPoint >( ).Count; 
+            kiC2Count = ( from koP in aoPList where koP.ViClusterId == 2 select koP ).ToList< MyPoint >( ).Count; 
+
             if( kdErr < adMaxError )
                break;              
             
