@@ -7,6 +7,8 @@ using System.Drawing.Imaging;
 using System.Collections;
 using System.Windows.Forms;
 
+using Mapack;
+
 namespace GMM
 {
     public class MyImageProc
@@ -23,10 +25,30 @@ namespace GMM
             return true;
         }
 
+      public static bool DrawCluster( PictureBox aoPan, List< MyPoint > aoPList, ref Bitmap aoBmp, double scale, int aiCnum )
+      {
+         for( int y = 0; y < aoBmp.Height; y++ )
+         {
+            for( int x = 0; x < aoBmp.Width; x++ )
+            {
+               if( aoPList[ ( y * aoBmp.Width ) + x ].ClusterId != aiCnum )
+               {
+                  aoBmp.SetPixel( x, y, Color.FromArgb( 255, 255, 255 ) );
+               }
+            }
+         }
+
+         aoPan.Image = aoBmp;
+
+         return( true );
+      }
+
         public static bool DrawClusters(PictureBox pan, List<MyPoint> PList, double scale, int clusterCount)
         {
             Graphics g = pan.CreateGraphics();
+
             g.Clear(Color.White);
+            
             // set cluster colors
             Color[] CColors = new Color[clusterCount];
             for (int i = 0; i < clusterCount; i++)

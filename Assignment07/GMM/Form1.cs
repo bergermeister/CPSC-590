@@ -19,7 +19,7 @@ namespace GMM
       private int viDataSize = 20;
       private double[ ] vdMu;
       private Random  voRand = new Random( );
-      double[ ]   vdSigma = null; // Standard deviation for cluter k
+      double[ ]   vdSigma = null; // Standard deviation for cluster k
       double[ , ] vdPDF   = null; // Calculated pdf for each data point based on mean and var for cluster k
       double[ , ] vdGamma = null; // probability matrix for each data point (i.e. probability that a data point belongs to cluster)
       double[ ]   vdPHI   = null; // Prior probabilities for each cluster

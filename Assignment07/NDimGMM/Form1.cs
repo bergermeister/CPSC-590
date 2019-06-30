@@ -222,7 +222,7 @@ namespace GMM
         {
             int k = int.Parse(txtNumClusters.Text);   // number of clusters
             int dim = 3; // number of dimensions for data
-            Bitmap koBmp = new Bitmap( @"..\..\Resources\tennis1.jpg" );
+            Bitmap koBmp = new Bitmap( @"..\..\Resources\tennis2.jpg" );
             Matrix X = new Matrix( koBmp.Height * koBmp.Width, 3 );
 
             for( int i = 0; i < koBmp.Height; i++ )
@@ -265,7 +265,27 @@ namespace GMM
                   y++;
                 }
             }
-            MyImageProc.DrawClusters(pic1, PList, 1, k);
+            // Draw cluster with smallest standard deviation
+            int    kiTr = 209;
+            int    kiTg = 224;
+            int    kiTb = 17;
+            double kdLoss = 0.0;
+            double kdBest = double.MaxValue;
+            int    kiCnum = 0;
+            for( int m = 0; m < k; m++ )
+            {
+               kdLoss = Math.Sqrt( ( ( double )kiTr - gmmnd.mu[ m ][ 0, 0 ] ) * ( ( double )kiTr - gmmnd.mu[ m ][ 0, 0 ] ) +
+                                   ( ( double )kiTg - gmmnd.mu[ m ][ 0, 1 ] ) * ( ( double )kiTg - gmmnd.mu[ m ][ 0, 1 ] ) +
+                                   ( ( double )kiTb - gmmnd.mu[ m ][ 0, 2 ] ) * ( ( double )kiTb - gmmnd.mu[ m ][ 0, 2 ] ) );
+               if( kdLoss < kdBest )
+               {
+                  kdBest = kdLoss;
+                  kiCnum = m;
+               }
+            }
+
+            //MyImageProc.DrawClusters(pic1, PList, 1, k);
+            MyImageProc.DrawCluster( pic1, PList, ref koBmp, 1, kiCnum );
         }
 
         List<MyPoint> InitializeData(int datSize)
