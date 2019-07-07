@@ -1,13 +1,14 @@
 ﻿using Mapack;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GMM
 {
-    class GMM_NDim
+    class GMM_NDim : IComparable< GMM_NDim >
     {
         public Matrix X { get; set; }
         int k;  // number of clusters or mixture components
@@ -17,6 +18,9 @@ namespace GMM
         double[,] pdf = null;
         public double[,] Gamma = null;
         double[] phi = null;
+        public double VdInertia{ get; set; }
+        public int ViK{ get{ return( this.k ); } }
+
         public GMM_NDim(int k, int dim, Matrix x)
         {
             this.k = k;
@@ -220,5 +224,82 @@ namespace GMM
                 Math.Exp(exp2);
             return res;
         }
+
+      public double MInertia( Bitmap aoBmp )
+      {
+         double             kdRes = 0.0;
+         double[ ]          kdD = new double[ this.k ];  // Diameters for each cluster
+         List< MyPoint >[ ] koList = new List< MyPoint >[ k ];
+         MyPoint[ ]         koCenter = new MyPoint[ k ];
+         int                kiC;
+         int                x = 0, y = 0;
+         double             kdPm;
+         MyPoint            koPt;
+
+         for( int i = 0; i < k; i++ )
+         {
+            kdD[ i ] = 0.0;
+            koList[ i ] = new List< MyPoint >( );
+            koCenter[ i ] = new MyPoint( );
+            koCenter[ i ].X = 0.0;
+            koCenter[ i ].Y = 0.0;
+         }
+
+         // Find all points in each cluster
+         for( int i = 0; i < X.Rows; i++ )
+         {
+            // Gamma matrix has the probabilities for a data point for its membership in each cluster
+            kiC = 0;
+            kdPm = Gamma[ i, 0 ];
+            for( int m = 0; m < k; m++ )
+            {
+               if( Gamma[ i, m ] > kdPm )
+               {
+                  kiC = m;  // data i belongs to cluster m
+                  kdPm = Gamma[ i, m ];
+               }
+            }
+            koPt = new MyPoint{ ClusterId = kiC, X = x, Y = y };
+            koCenter[ kiC ].X += x;
+            koCenter[ kiC ].Y += y;
+            koList[ kiC ].Add( koPt );
+            x++;
+            if( x >= aoBmp.Width )
+            {
+               x = 0;
+               y++;
+            }
+         }
+
+         for( int i = 0; i < k; i++ )
+         {
+            // Calculate the center of the cluster
+            koCenter[ i ].X /= koList[ i ].Count;
+            koCenter[ i ].Y /= koList[ i ].Count;
+
+            // Calculate the diameter of each cluster
+            for( int j = 0; j < koList[ i ].Count; j++ )
+            {
+               double kdDist = 2 * Math.Sqrt( ( koList[ i ][ j ].X - koCenter[ i ].X ) * ( koList[ i ][ j ].X - koCenter[ i ].X ) +
+                                              ( koList[ i ][ j ].Y - koCenter[ i ].Y ) * ( koList[ i ][ j ].Y - koCenter[ i ].Y ) ); 
+               if( kdDist > kdD[ i ] )
+               {
+                  kdD[ i ] = kdDist;
+               }
+            }
+
+            // Normalize each diameter
+            kdD[ i ] /= koList[ i ].Count;
+
+            kdRes += kdD[ i ];
+         }
+
+         return( kdRes );
+      }
+
+      public int CompareTo( GMM_NDim aoOther )
+      {
+         return( this.VdInertia.CompareTo( aoOther.VdInertia ) );
+      }
     }
 }

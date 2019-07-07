@@ -28,72 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-         this.btnTestMM = new System.Windows.Forms.Button();
-         this.btnTestClass = new System.Windows.Forms.Button();
-         this.txtNum = new System.Windows.Forms.TextBox();
-         this.lblNum = new System.Windows.Forms.Label();
-         this.pic1 = new System.Windows.Forms.PictureBox();
+         this.voPB = new System.Windows.Forms.PictureBox();
          this.btnGMMND = new System.Windows.Forms.Button();
          this.txtNumClusters = new System.Windows.Forms.TextBox();
          this.label1 = new System.Windows.Forms.Label();
-         ((System.ComponentModel.ISupportInitialize)(this.pic1)).BeginInit();
+         this.voBtnBrowse = new System.Windows.Forms.Button();
+         this.voLB = new System.Windows.Forms.ListBox();
+         this.label2 = new System.Windows.Forms.Label();
+         this.voBtnShowBall = new System.Windows.Forms.Button();
+         this.voBtnSwarm = new System.Windows.Forms.Button();
+         this.label3 = new System.Windows.Forms.Label();
+         this.voResult = new System.Windows.Forms.ListBox();
+         ((System.ComponentModel.ISupportInitialize)(this.voPB)).BeginInit();
          this.SuspendLayout();
          // 
-         // btnTestMM
+         // voPB
          // 
-         this.btnTestMM.Location = new System.Drawing.Point(22, 17);
-         this.btnTestMM.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
-         this.btnTestMM.Name = "btnTestMM";
-         this.btnTestMM.Size = new System.Drawing.Size(131, 24);
-         this.btnTestMM.TabIndex = 0;
-         this.btnTestMM.Text = "GMM 1D";
-         this.btnTestMM.UseVisualStyleBackColor = true;
-         this.btnTestMM.Click += new System.EventHandler(this.btnTestMM_Click);
-         // 
-         // btnTestClass
-         // 
-         this.btnTestClass.Location = new System.Drawing.Point(22, 92);
-         this.btnTestClass.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
-         this.btnTestClass.Name = "btnTestClass";
-         this.btnTestClass.Size = new System.Drawing.Size(131, 22);
-         this.btnTestClass.TabIndex = 1;
-         this.btnTestClass.Text = "Test Class";
-         this.btnTestClass.UseVisualStyleBackColor = true;
-         this.btnTestClass.Click += new System.EventHandler(this.btnTest_Click);
-         // 
-         // txtNum
-         // 
-         this.txtNum.Location = new System.Drawing.Point(99, 68);
-         this.txtNum.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
-         this.txtNum.Name = "txtNum";
-         this.txtNum.Size = new System.Drawing.Size(57, 20);
-         this.txtNum.TabIndex = 2;
-         // 
-         // lblNum
-         // 
-         this.lblNum.AutoSize = true;
-         this.lblNum.Location = new System.Drawing.Point(25, 68);
-         this.lblNum.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
-         this.lblNum.Name = "lblNum";
-         this.lblNum.Size = new System.Drawing.Size(72, 13);
-         this.lblNum.TabIndex = 3;
-         this.lblNum.Text = "Enter Number";
-         // 
-         // pic1
-         // 
-         this.pic1.Location = new System.Drawing.Point(170, 17);
-         this.pic1.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
-         this.pic1.Name = "pic1";
-         this.pic1.Size = new System.Drawing.Size(621, 447);
-         this.pic1.TabIndex = 5;
-         this.pic1.TabStop = false;
+         this.voPB.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.voPB.Location = new System.Drawing.Point(170, 10);
+         this.voPB.Margin = new System.Windows.Forms.Padding(1);
+         this.voPB.Name = "voPB";
+         this.voPB.Size = new System.Drawing.Size(877, 597);
+         this.voPB.TabIndex = 5;
+         this.voPB.TabStop = false;
          // 
          // btnGMMND
          // 
-         this.btnGMMND.Location = new System.Drawing.Point(22, 277);
-         this.btnGMMND.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+         this.btnGMMND.Location = new System.Drawing.Point(10, 101);
+         this.btnGMMND.Margin = new System.Windows.Forms.Padding(1);
          this.btnGMMND.Name = "btnGMMND";
-         this.btnGMMND.Size = new System.Drawing.Size(131, 25);
+         this.btnGMMND.Size = new System.Drawing.Size(158, 25);
          this.btnGMMND.TabIndex = 6;
          this.btnGMMND.Text = "GMM ND";
          this.btnGMMND.UseVisualStyleBackColor = true;
@@ -101,55 +67,131 @@
          // 
          // txtNumClusters
          // 
-         this.txtNumClusters.Location = new System.Drawing.Point(122, 254);
-         this.txtNumClusters.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+         this.txtNumClusters.Location = new System.Drawing.Point(108, 79);
+         this.txtNumClusters.Margin = new System.Windows.Forms.Padding(1);
          this.txtNumClusters.Name = "txtNumClusters";
          this.txtNumClusters.Size = new System.Drawing.Size(34, 20);
          this.txtNumClusters.TabIndex = 7;
-         this.txtNumClusters.Text = "3";
+         this.txtNumClusters.Text = "4";
          // 
          // label1
          // 
          this.label1.AutoSize = true;
-         this.label1.Location = new System.Drawing.Point(25, 257);
+         this.label1.Location = new System.Drawing.Point(10, 82);
          this.label1.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
          this.label1.Name = "label1";
-         this.label1.Size = new System.Drawing.Size(94, 13);
+         this.label1.Size = new System.Drawing.Size(96, 13);
          this.label1.TabIndex = 8;
-         this.label1.Text = "number of Clusters";
+         this.label1.Text = "Number of Clusters";
+         // 
+         // voBtnBrowse
+         // 
+         this.voBtnBrowse.Location = new System.Drawing.Point(10, 10);
+         this.voBtnBrowse.Margin = new System.Windows.Forms.Padding(1);
+         this.voBtnBrowse.Name = "voBtnBrowse";
+         this.voBtnBrowse.Size = new System.Drawing.Size(158, 25);
+         this.voBtnBrowse.TabIndex = 9;
+         this.voBtnBrowse.Text = "Browse";
+         this.voBtnBrowse.UseVisualStyleBackColor = true;
+         this.voBtnBrowse.Click += new System.EventHandler(this.voBtnBrowse_Click);
+         // 
+         // voLB
+         // 
+         this.voLB.FormattingEnabled = true;
+         this.voLB.Location = new System.Drawing.Point(10, 143);
+         this.voLB.Name = "voLB";
+         this.voLB.Size = new System.Drawing.Size(156, 134);
+         this.voLB.TabIndex = 10;
+         this.voLB.SelectedIndexChanged += new System.EventHandler(this.voLB_SelectedIndexChanged);
+         // 
+         // label2
+         // 
+         this.label2.AutoSize = true;
+         this.label2.Location = new System.Drawing.Point(10, 127);
+         this.label2.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+         this.label2.Name = "label2";
+         this.label2.Size = new System.Drawing.Size(47, 13);
+         this.label2.TabIndex = 11;
+         this.label2.Text = "Clusters:";
+         // 
+         // voBtnShowBall
+         // 
+         this.voBtnShowBall.Location = new System.Drawing.Point(10, 281);
+         this.voBtnShowBall.Margin = new System.Windows.Forms.Padding(1);
+         this.voBtnShowBall.Name = "voBtnShowBall";
+         this.voBtnShowBall.Size = new System.Drawing.Size(158, 25);
+         this.voBtnShowBall.TabIndex = 12;
+         this.voBtnShowBall.Text = "Show Tennis Ball";
+         this.voBtnShowBall.UseVisualStyleBackColor = true;
+         this.voBtnShowBall.Click += new System.EventHandler(this.voBtnShowBall_Click);
+         // 
+         // voBtnSwarm
+         // 
+         this.voBtnSwarm.Location = new System.Drawing.Point(10, 359);
+         this.voBtnSwarm.Margin = new System.Windows.Forms.Padding(1);
+         this.voBtnSwarm.Name = "voBtnSwarm";
+         this.voBtnSwarm.Size = new System.Drawing.Size(158, 25);
+         this.voBtnSwarm.TabIndex = 13;
+         this.voBtnSwarm.Text = "Swarm GMM ND";
+         this.voBtnSwarm.UseVisualStyleBackColor = true;
+         this.voBtnSwarm.Click += new System.EventHandler(this.voBtnSwarm_Click);
+         // 
+         // label3
+         // 
+         this.label3.AutoSize = true;
+         this.label3.Location = new System.Drawing.Point(10, 385);
+         this.label3.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
+         this.label3.Name = "label3";
+         this.label3.Size = new System.Drawing.Size(47, 13);
+         this.label3.TabIndex = 15;
+         this.label3.Text = "Clusters:";
+         // 
+         // voResult
+         // 
+         this.voResult.FormattingEnabled = true;
+         this.voResult.Location = new System.Drawing.Point(10, 401);
+         this.voResult.Name = "voResult";
+         this.voResult.Size = new System.Drawing.Size(156, 134);
+         this.voResult.TabIndex = 14;
+         this.voResult.SelectedIndexChanged += new System.EventHandler(this.voResult_SelectedIndexChanged);
          // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(722, 445);
+         this.ClientSize = new System.Drawing.Size(1057, 617);
+         this.Controls.Add(this.label3);
+         this.Controls.Add(this.voResult);
+         this.Controls.Add(this.voBtnSwarm);
+         this.Controls.Add(this.voBtnShowBall);
+         this.Controls.Add(this.label2);
+         this.Controls.Add(this.voLB);
+         this.Controls.Add(this.voBtnBrowse);
          this.Controls.Add(this.label1);
          this.Controls.Add(this.txtNumClusters);
          this.Controls.Add(this.btnGMMND);
-         this.Controls.Add(this.pic1);
-         this.Controls.Add(this.lblNum);
-         this.Controls.Add(this.txtNum);
-         this.Controls.Add(this.btnTestClass);
-         this.Controls.Add(this.btnTestMM);
-         this.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+         this.Controls.Add(this.voPB);
+         this.Margin = new System.Windows.Forms.Padding(1);
          this.Name = "Form1";
          this.Text = "Form1";
-         ((System.ComponentModel.ISupportInitialize)(this.pic1)).EndInit();
+         ((System.ComponentModel.ISupportInitialize)(this.voPB)).EndInit();
          this.ResumeLayout(false);
          this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnTestMM;
-        private System.Windows.Forms.Button btnTestClass;
-        private System.Windows.Forms.TextBox txtNum;
-        private System.Windows.Forms.Label lblNum;
-        private System.Windows.Forms.PictureBox pic1;
+        private System.Windows.Forms.PictureBox voPB;
         private System.Windows.Forms.Button btnGMMND;
         private System.Windows.Forms.TextBox txtNumClusters;
         private System.Windows.Forms.Label label1;
-    }
+      private System.Windows.Forms.Button voBtnBrowse;
+      private System.Windows.Forms.ListBox voLB;
+      private System.Windows.Forms.Label label2;
+      private System.Windows.Forms.Button voBtnShowBall;
+      private System.Windows.Forms.Button voBtnSwarm;
+      private System.Windows.Forms.Label label3;
+      private System.Windows.Forms.ListBox voResult;
+   }
 }
 
