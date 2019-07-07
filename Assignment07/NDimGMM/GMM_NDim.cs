@@ -229,6 +229,7 @@ namespace GMM
       {
          double             kdRes = 0.0;
          double[ ]          kdD = new double[ this.k ];  // Diameters for each cluster
+         double[ , ]        kdP = new double[ this.k, 4 ];
          List< MyPoint >[ ] koList = new List< MyPoint >[ k ];
          MyPoint[ ]         koCenter = new MyPoint[ k ];
          int                kiC;
@@ -280,12 +281,8 @@ namespace GMM
             // Calculate the diameter of each cluster
             for( int j = 0; j < koList[ i ].Count; j++ )
             {
-               double kdDist = 2 * Math.Sqrt( ( koList[ i ][ j ].X - koCenter[ i ].X ) * ( koList[ i ][ j ].X - koCenter[ i ].X ) +
-                                              ( koList[ i ][ j ].Y - koCenter[ i ].Y ) * ( koList[ i ][ j ].Y - koCenter[ i ].Y ) ); 
-               if( kdDist > kdD[ i ] )
-               {
-                  kdD[ i ] = kdDist;
-               }
+               kdD[ i ] += Math.Sqrt( ( koList[ i ][ j ].X - koCenter[ i ].X ) * ( koList[ i ][ j ].X - koCenter[ i ].X ) +
+                                      ( koList[ i ][ j ].Y - koCenter[ i ].Y ) * ( koList[ i ][ j ].Y - koCenter[ i ].Y ) ); 
             }
 
             // Normalize each diameter
@@ -294,7 +291,7 @@ namespace GMM
             kdRes += kdD[ i ];
          }
 
-         return( kdRes );
+         return( kdRes / this.ViK );
       }
 
       public int CompareTo( GMM_NDim aoOther )

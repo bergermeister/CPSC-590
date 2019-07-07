@@ -21,7 +21,6 @@ namespace GMM
       private List< string >   voCluster;
       private List< string >   voStrSwarmGMM;
       private List< GMM_NDim > voSwarmGMM;
-      private List< MyPoint >  voPList = new List< MyPoint >( );
       private GMM_NDim         voGmmnd;
       private Random           voRand = new Random();
 
@@ -48,12 +47,9 @@ namespace GMM
       {
          try
          {
-            int       kiK = int.Parse( txtNumClusters.Text );   // number of clusters
-            int       kiDim = 3;                                // number of dimensions for data
-            int       kiC;
-            double    kdPm;
-            Matrix    koX = new Matrix( this.voOrig.Height * this.voOrig.Width, 3 );
-            MyPoint   koPt;
+            int    kiK = int.Parse( txtNumClusters.Text );   // number of clusters
+            int    kiDim = 3;                                // number of dimensions for data
+            Matrix koX = new Matrix( this.voOrig.Height * this.voOrig.Width, 3 );
 
             for( int i = 0; i < this.voOrig.Height; i++ )
             {
@@ -76,30 +72,6 @@ namespace GMM
                this.voCluster.Add( String.Format( "Cluster {0}", i ) );
             }
             this.voLB.DataSource = this.voCluster;
-
-            int x = 0, y = 0;
-            for( int i = 0; i < koX.Rows; i++ )
-            {
-               // Gamma matrix has the probabilities for a data point for its membership in each cluster
-               kiC = 0;
-               kdPm = this.voGmmnd.Gamma[ i, 0 ];
-               for( int m = 0; m < kiK; m++ )
-               {
-                  if( this.voGmmnd.Gamma[ i, m ] > kdPm )
-                  {
-                     kiC = m;  // data i belongs to cluster m
-                     kdPm = this.voGmmnd.Gamma[ i, m ];
-                  }
-               }
-               koPt = new MyPoint{ ClusterId = kiC, X = x, Y = y };
-               this.voPList.Add( koPt );
-               x++;
-               if( x >= this.voOrig.Width )
-               {
-                 x = 0;
-                 y++;
-               }
-            }
          }
          catch( Exception koEx )
          {
@@ -111,11 +83,11 @@ namespace GMM
       {
          ListBox koLB = aoSender as ListBox;
          Bitmap  koBmp;
-
+         
          if( koLB.SelectedIndex >= 0 )
          {
             koBmp = ( Bitmap )this.voOrig.Clone( );
-            MyImageProc.DrawCluster( this.voPB, this.voPList, ref koBmp, 1, koLB.SelectedIndex );
+            MyImageProc.DrawCluster( this.voPB, this.mClusterPoints( ), ref koBmp, 1, koLB.SelectedIndex );
          }
          else
          {
@@ -146,7 +118,7 @@ namespace GMM
             }
          }
 
-         MyImageProc.DrawCluster( this.voPB, this.voPList, ref koBmp, 1, kiCnum );
+         MyImageProc.DrawCluster( this.voPB, this.mClusterPoints( ), ref koBmp, 1, kiCnum );
       }
 
       private void voBtnSwarm_Click( object sender, EventArgs e )
@@ -208,24 +180,6 @@ namespace GMM
          this.voResult.DataSource = this.voStrSwarmGMM;
       }   
 
-      public double ComputeVariance(double[] data)
-      {
-         double avg = data.Average();
-         double sum = 0;
-         foreach (double num in data)
-         {
-            sum += (num - avg)*(num - avg);
-         }
-         return sum / data.Length;
-      }
-
-      public double Gaussian(double num, double mean, double stddev)  // 1-D gaussian
-      {
-         double res = (1 / (stddev * Math.Sqrt(2.0 * Math.PI))) * 
-            Math.Exp( (-1 * (num - mean) * (num - mean)) / (2 * stddev * stddev));
-         return res;
-      }
-
       private void voResult_SelectedIndexChanged( object aoSender, EventArgs aoArgs )
       {
          ListBox koLB = aoSender as ListBox;
@@ -233,18 +187,53 @@ namespace GMM
          if( koLB.SelectedIndex >= 0 )
          {
             this.voCluster.Clear( );
-            for( int i = 0; i < this.voSwarmGMM.Count; i++ )
+            for( int i = 0; i < this.voSwarmGMM[ koLB.SelectedIndex ].ViK; i++ )
             {
                this.voCluster.Add( String.Format( "Cluster {0}", i ) );
             }
             this.voLB.DataSource = null;
             this.voLB.DataSource = this.voCluster;
+            this.voGmmnd = this.voSwarmGMM[ koLB.SelectedIndex ];
          }
          else
          {
             this.voPB.Image = null;
             this.voPB.Image = this.voOrig;
          }
+      }
+   
+      private List< MyPoint > mClusterPoints( )
+      {
+         double          kdPm;
+         int             kiC;
+         MyPoint         koPt;
+         List< MyPoint > koPList = new List< MyPoint >( );
+
+         int x = 0, y = 0;
+         for( int i = 0; i < this.voGmmnd.X.Rows; i++ )
+         {
+            // Gamma matrix has the probabilities for a data point for its membership in each cluster
+            kiC = 0;
+            kdPm = this.voGmmnd.Gamma[ i, 0 ];
+            for( int m = 0; m < this.voGmmnd.ViK; m++ )
+            {
+               if( this.voGmmnd.Gamma[ i, m ] > kdPm )
+               {
+                  kiC = m;  // data i belongs to cluster m
+                  kdPm = this.voGmmnd.Gamma[ i, m ];
+               }
+            }
+            koPt = new MyPoint{ ClusterId = kiC, X = x, Y = y };
+            koPList.Add( koPt );
+            x++;
+            if( x >= this.voOrig.Width )
+            {
+               x = 0;
+               y++;
+            }
+         }
+
+         return( koPList );
       }
    }
 }
