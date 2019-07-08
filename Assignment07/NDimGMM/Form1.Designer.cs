@@ -39,6 +39,8 @@
          this.voBtnSwarm = new System.Windows.Forms.Button();
          this.label3 = new System.Windows.Forms.Label();
          this.voResult = new System.Windows.Forms.ListBox();
+         this.voLblX = new System.Windows.Forms.Label();
+         this.voLblY = new System.Windows.Forms.Label();
          ((System.ComponentModel.ISupportInitialize)(this.voPB)).BeginInit();
          this.SuspendLayout();
          // 
@@ -53,6 +55,8 @@
          this.voPB.Size = new System.Drawing.Size(877, 597);
          this.voPB.TabIndex = 5;
          this.voPB.TabStop = false;
+         this.voPB.MouseClick += new System.Windows.Forms.MouseEventHandler(this.voPB_MouseClick);
+         this.voPB.MouseMove += new System.Windows.Forms.MouseEventHandler(this.voPB_MouseMove);
          // 
          // btnGMMND
          // 
@@ -155,11 +159,31 @@
          this.voResult.TabIndex = 14;
          this.voResult.SelectedIndexChanged += new System.EventHandler(this.voResult_SelectedIndexChanged);
          // 
+         // voLblX
+         // 
+         this.voLblX.AutoSize = true;
+         this.voLblX.Location = new System.Drawing.Point(10, 581);
+         this.voLblX.Name = "voLblX";
+         this.voLblX.Size = new System.Drawing.Size(17, 13);
+         this.voLblX.TabIndex = 16;
+         this.voLblX.Text = "X:";
+         // 
+         // voLblY
+         // 
+         this.voLblY.AutoSize = true;
+         this.voLblY.Location = new System.Drawing.Point(10, 594);
+         this.voLblY.Name = "voLblY";
+         this.voLblY.Size = new System.Drawing.Size(17, 13);
+         this.voLblY.TabIndex = 17;
+         this.voLblY.Text = "Y:";
+         // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.ClientSize = new System.Drawing.Size(1057, 617);
+         this.Controls.Add(this.voLblY);
+         this.Controls.Add(this.voLblX);
          this.Controls.Add(this.label3);
          this.Controls.Add(this.voResult);
          this.Controls.Add(this.voBtnSwarm);
@@ -192,6 +216,8 @@
       private System.Windows.Forms.Button voBtnSwarm;
       private System.Windows.Forms.Label label3;
       private System.Windows.Forms.ListBox voResult;
+      private System.Windows.Forms.Label voLblX;
+      private System.Windows.Forms.Label voLblY;
    }
 }
 

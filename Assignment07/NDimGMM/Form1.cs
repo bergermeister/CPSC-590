@@ -235,5 +235,37 @@ namespace GMM
 
          return( koPList );
       }
+
+      private void voPB_MouseMove( object aoSender, MouseEventArgs aoArgs )
+      {
+         PictureBox koPB = aoSender as PictureBox;
+         this.voLblX.Text = "X: " + ( MousePosition.X - ( this.Location.X + koPB.Location.X ) ).ToString( );
+         this.voLblY.Text = "Y: " + ( MousePosition.Y - ( this.Location.Y + koPB.Location.Y ) ).ToString( );
+      }
+
+      private void voPB_MouseClick( object aoSender, MouseEventArgs aoArgs )
+      {
+         PictureBox koPB = aoSender as PictureBox;
+         int        kiX  = aoArgs.X;
+         int        kiY  = aoArgs.Y;
+         int        kiI  = ( kiY * this.voOrig.Width ) + kiX;
+         double     kdPm;
+         int        kiC;
+         Bitmap     koBmp = ( Bitmap )this.voOrig.Clone( );
+
+         // Gamma matrix has the probabilities for a data point for its membership in each cluster
+         kiC = 0;
+         kdPm = this.voGmmnd.Gamma[ kiI, 0 ];
+         for( int m = 0; m < this.voGmmnd.ViK; m++ )
+         {
+            if( this.voGmmnd.Gamma[ kiI, m ] > kdPm )
+            {
+               kiC  = m;  // data i belongs to cluster m
+               kdPm = this.voGmmnd.Gamma[ kiI, m ];
+            }
+         }
+         
+         MyImageProc.DrawCluster( this.voPB, this.mClusterPoints( ), ref koBmp, 1, kiC );
+      }
    }
 }
