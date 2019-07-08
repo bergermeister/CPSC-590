@@ -253,19 +253,26 @@ namespace GMM
          int        kiC;
          Bitmap     koBmp = ( Bitmap )this.voOrig.Clone( );
 
-         // Gamma matrix has the probabilities for a data point for its membership in each cluster
-         kiC = 0;
-         kdPm = this.voGmmnd.Gamma[ kiI, 0 ];
-         for( int m = 0; m < this.voGmmnd.ViK; m++ )
+         try
          {
-            if( this.voGmmnd.Gamma[ kiI, m ] > kdPm )
+            // Gamma matrix has the probabilities for a data point for its membership in each cluster
+            kiC = 0;
+            kdPm = this.voGmmnd.Gamma[ kiI, 0 ];
+            for( int m = 0; m < this.voGmmnd.ViK; m++ )
             {
-               kiC  = m;  // data i belongs to cluster m
-               kdPm = this.voGmmnd.Gamma[ kiI, m ];
+               if( this.voGmmnd.Gamma[ kiI, m ] > kdPm )
+               {
+                  kiC  = m;  // data i belongs to cluster m
+                  kdPm = this.voGmmnd.Gamma[ kiI, m ];
+               }
             }
-         }
          
-         MyImageProc.DrawCluster( this.voPB, this.mClusterPoints( ), ref koBmp, 1, kiC );
+            MyImageProc.DrawCluster( this.voPB, this.mClusterPoints( ), ref koBmp, 1, kiC );
+         }
+         catch( Exception koEx )
+         {
+            Console.WriteLine( koEx.Message );
+         }
       }
    }
 }
