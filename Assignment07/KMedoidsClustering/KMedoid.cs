@@ -33,7 +33,7 @@ namespace KMedoidsClustering
          this.VoClusters = new List< int >( );
          this.vdDistances = new double[ aoInputs.Count, aoInputs.Count ];
 
-         // for( int i = 0; i < aoInputs.Count - 1; i++ )
+         //for( int i = 0; i < aoInputs.Count - 1; i++ )
          Parallel.For( 0, aoInputs.Count - 1, ( i ) =>
          {
             for( int j = i + 1; j < aoInputs.Count; j++ )
@@ -71,9 +71,6 @@ namespace KMedoidsClustering
          double[ ]   kdDistanceSums = new double[ aoInputs.Count ];
          double[ , ] kdP = new double[ aoInputs.Count, aoInputs.Count ];
          double[ ]   kdPSum = new double[ aoInputs.Count ];
-         double[ ]   kdMedoidDistanceSums;
-         double      kdPO;
-         int         kiQ;
 
          //for( int i = 0; i < aoInputs.Count; i++ )
          Parallel.For( 0, aoInputs.Count, ( i ) =>
@@ -93,7 +90,7 @@ namespace KMedoidsClustering
             }
          } );
 
-         // for( int i = 0; i < aoInputs.Count; i++ )
+         //for( int i = 0; i < aoInputs.Count; i++ )
          Parallel.For( 0, aoInputs.Count, ( i ) =>
          {
             for( int j = 0; j < aoInputs.Count; j++ )
@@ -104,17 +101,20 @@ namespace KMedoidsClustering
 
          this.VdMedoids[ 0 ] = Array.IndexOf( kdPSum, kdPSum.Min( ) );
 
-         //for( int i = 1; i < aiK; i++ )
-         Parallel.For( 1, aiK, ( i ) =>
+         for( int i = 1; i < aiK; i++ )
+         //Parallel.For( 1, aiK, ( i ) =>
          {
-            kdMedoidDistanceSums = new double[ aoInputs.Count ];
-            for( int j = 0; j < i; j++ )
+            double    kdPO;
+            int       kiQ;
+            double[ ] kdMedoidDistanceSums = new double[ aoInputs.Count ];
+            Parallel.For( 0, i, ( j ) => 
+            //for( int j = 0; j < i; j++ )
             {
                for( int l = 0; l < aoInputs.Count; l++ )
                {
                   kdMedoidDistanceSums[ l ] += this.vdDistances[ l, this.VdMedoids[ j ] ];
                }
-            }
+            } );
             if( this.VdMedoids.Contains( Array.IndexOf( kdMedoidDistanceSums, kdMedoidDistanceSums.Max( ) ) ) == true )
             {
                kiQ = 0;
@@ -139,13 +139,13 @@ namespace KMedoidsClustering
                   this.VdMedoids[ i ] = Array.IndexOf( kdMedoidDistanceSums, kdMedoidDistanceSums.Max( ) );
                }
             }
-         } );
+         }// );
       }
 
       private void mUpdateClusters( List< T > aoInputs )
       {
-         // for( int i = 0; i < aoInputs.Count; i++ )
-         Parallel.For( 0, aoInputs.Count, ( i ) =>
+         for( int i = 0; i < aoInputs.Count; i++ )
+         //Parallel.For( 0, aoInputs.Count, ( i ) =>
          {
             var kdMedoidDistances = this.VdMedoids.Select( x => this.vdDistances[ x, i ] ).ToList( );
             int kiMinIndex = 0;
@@ -164,7 +164,7 @@ namespace KMedoidsClustering
             {
                this.VoClusters.Add( kiMinIndex );
             }
-         } );
+         }// );
       }
    
       private int[ ] mGetNewMedoids( int aiK, ref List< T > aoInputs, ref double adLastTotalCost, out bool abChanged, int aiFactorDivider )
