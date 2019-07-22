@@ -52,5 +52,11 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GASvcLib\GASvcLib.csproj">
+      <Project>{e74031bc-e6b8-4250-a129-3d4cca4cf50d}</Project>
+      <Name>GASvcLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,7 +9,7 @@ namespace GASvcHost
       {
          try
          {
-            ServiceHost koSH = new ServiceHost( );
+            ServiceHost koSH = new ServiceHost( typeof( GASvcLib.GASvc ) );
             Console.WriteLine( "Genetic Algorithm Service Ready, Listening on 7060" );
             Console.WriteLine( "Hit Enter to Stop..." );
             koSH.Open( );
