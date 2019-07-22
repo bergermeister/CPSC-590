@@ -1,7 +1,9 @@
 ﻿namespace GASvcLib
 {
    using System;
+   using System.ServiceModel;
 
+   [ ServiceBehavior( InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple ) ]
    public class GASvc : IGASvc
    {
       private int[ , ] viDistance;
@@ -9,13 +11,18 @@
 
       public void MExecute( int[ ][ ] aiDistMat, int aiNumThreads )
       {
-         this.viDistance = new int[ aiDistMat
+         int kiRow = aiDistMat.Length;
+         int kiCol = aiDistMat[ 0 ].Length;
 
-         for( int kiI = 0; kiI < aiDistMat.Length; kiI++ )
+         this.viDistance = new int[ kiRow, kiCol ];
+
+         for( int kiI = 0; kiI < kiRow; kiI++ )
          {
-
+            for( int kiJ = 0; kiJ < kiCol; kiJ++ )
+            {
+               this.viDistance[ kiI, kiJ ] = aiDistMat[ kiI ][ kiJ ];
+            }
          }
-         // TODO this.viDistance   = aiDistMat;
          this.viNumThreads = aiNumThreads;
       }
 
