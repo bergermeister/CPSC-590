@@ -149,11 +149,58 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="Distributor_MOnUpdate_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="Sequence" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm" />
+          <sp:Header Name="SequenceAcknowledgement" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm" />
+          <sp:Header Name="AckRequested" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm" />
+          <sp:Header Name="ChannelInstance" Namespace="http://schemas.microsoft.com/ws/2005/02/duplex" />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="Distributor_MOnComplete_output_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+          <sp:Header Name="Sequence" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm" />
+          <sp:Header Name="SequenceAcknowledgement" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm" />
+          <sp:Header Name="AckRequested" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm" />
+          <sp:Header Name="ChannelInstance" Namespace="http://schemas.microsoft.com/ws/2005/02/duplex" />
+          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
+          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
+        </sp:SignedParts>
+        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <sp:Body />
+        </sp:EncryptedParts>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:51563/Distributor.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:51563/Distributor.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="http://localhost:51563/Distributor.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import schemaLocation="http://localhost:51563/Distributor.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/GAWebLib" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IDistributor_MExecute_InputMessage">
@@ -162,10 +209,22 @@
   <wsdl:message name="IDistributor_MExecute_OutputMessage">
     <wsdl:part name="parameters" element="tns:MExecuteResponse" />
   </wsdl:message>
+  <wsdl:message name="IDistributor_MOnUpdate_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:MOnUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IDistributor_MOnComplete_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:MOnComplete" />
+  </wsdl:message>
   <wsdl:portType name="IDistributor">
     <wsdl:operation name="MExecute">
       <wsdl:input wsaw:Action="http://tempuri.org/IDistributor/MExecute" message="tns:IDistributor_MExecute_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IDistributor/MExecuteResponse" message="tns:IDistributor_MExecute_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MOnUpdate">
+      <wsdl:output wsaw:Action="http://tempuri.org/IDistributor/MOnUpdate" message="tns:IDistributor_MOnUpdate_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MOnComplete">
+      <wsdl:output wsaw:Action="http://tempuri.org/IDistributor/MOnComplete" message="tns:IDistributor_MOnComplete_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Distributor" type="tns:IDistributor">
@@ -179,6 +238,20 @@
       </wsdl:input>
       <wsdl:output>
         <wsp:PolicyReference URI="#Distributor_MExecute_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MOnUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IDistributor/MOnUpdate" style="document" />
+      <wsdl:output>
+        <wsp:PolicyReference URI="#Distributor_MOnUpdate_output_policy" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MOnComplete">
+      <soap12:operation soapAction="http://tempuri.org/IDistributor/MOnComplete" style="document" />
+      <wsdl:output>
+        <wsp:PolicyReference URI="#Distributor_MOnComplete_output_policy" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

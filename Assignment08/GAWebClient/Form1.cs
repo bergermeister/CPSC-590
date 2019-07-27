@@ -12,8 +12,7 @@
       private Bitmap    voOrig = null;
       private Bitmap    voWork = null;
       private ArrayList voPoints = new ArrayList( );
-      private int[ , ]  viDistMat = null;
-      
+      private int[ , ]  viDistMat = null;      
 
       public Form1( )
       {

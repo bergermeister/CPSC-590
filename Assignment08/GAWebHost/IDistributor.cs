@@ -11,7 +11,7 @@
       void MOnComplete( GAWebLib.Member[ ] aoMember );
    }
 
-   [ ServiceContract ]//( CallbackContract = typeof( ICallback ) ]
+   [ ServiceContract( CallbackContract = typeof( ICallback ) ) ]
    public interface IDistributor
    {
       [ OperationContract ]

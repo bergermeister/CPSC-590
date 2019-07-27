@@ -12,7 +12,7 @@ namespace GAWebClient.Host {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="Host.IDistributor")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="Host.IDistributor", CallbackContract=typeof(GAWebClient.Host.IDistributorCallback))]
     public interface IDistributor {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDistributor/MExecute", ReplyAction="http://tempuri.org/IDistributor/MExecuteResponse")]
@@ -23,30 +23,41 @@ namespace GAWebClient.Host {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IDistributorCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IDistributor/MOnUpdate")]
+        void MOnUpdate(GAWebLib.Member[] aoMembers);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IDistributor/MOnComplete")]
+        void MOnComplete(GAWebLib.Member[] aoMember);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IDistributorChannel : GAWebClient.Host.IDistributor, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class DistributorClient : System.ServiceModel.ClientBase<GAWebClient.Host.IDistributor>, GAWebClient.Host.IDistributor {
+    public partial class DistributorClient : System.ServiceModel.DuplexClientBase<GAWebClient.Host.IDistributor>, GAWebClient.Host.IDistributor {
         
-        public DistributorClient() {
+        public DistributorClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public DistributorClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public DistributorClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public DistributorClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public DistributorClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public DistributorClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public DistributorClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public DistributorClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public DistributorClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
         }
         
         public void MExecute(int[][] aiDistMat, int aiNumWorkers) {
