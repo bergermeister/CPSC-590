@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="0e7ea286-98e1-41a3-b352-d8ce8fdcf06a" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:51563/Distributor.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Distributor.disco" MetadataType="Disco" ID="22eaa87a-7813-4542-9f50-8e52a79a1acf" SourceId="1" SourceUrl="http://localhost:51563/Distributor.svc?disco" />
+    <MetadataFile FileName="Distributor.wsdl" MetadataType="Wsdl" ID="0aba365d-c386-4cbc-8579-43620966d514" SourceId="1" SourceUrl="http://localhost:51563/Distributor.svc?wsdl" />
+    <MetadataFile FileName="Distributor.xsd" MetadataType="Schema" ID="ed7406af-7b96-4d2a-9967-1757b981601c" SourceId="1" SourceUrl="http://localhost:51563/Distributor.svc?xsd=xsd2" />
+    <MetadataFile FileName="Distributor1.xsd" MetadataType="Schema" ID="fc052cd6-8c77-4420-8038-50f9e855eb90" SourceId="1" SourceUrl="http://localhost:51563/Distributor.svc?xsd=xsd1" />
+    <MetadataFile FileName="Distributor2.xsd" MetadataType="Schema" ID="b75dbb42-d6bc-4ddf-963b-a7687118be9e" SourceId="1" SourceUrl="http://localhost:51563/Distributor.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

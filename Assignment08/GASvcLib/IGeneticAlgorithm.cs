@@ -2,10 +2,10 @@
 {
    interface IGeneticAlgorithm
    {
-      void InitializePopulation( );
-      void EvaluatePopulation( );
-      void SelectPopulation( );
-      void CrossoverPopulation( );
-      void MutatePopulation( ); 
+      void MInitializePopulation( );
+      void MEvaluatePopulation( );
+      void MSelectPopulation( );
+      void MCrossoverPopulation( );
+      void MMutatePopulation( ); 
    }
 }

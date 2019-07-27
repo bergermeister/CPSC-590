@@ -2,16 +2,16 @@
 {
    using System.ServiceModel;
 
-   /*
-    * TODO: Breaks build
    interface ICallback
    {
       [ OperationContract( IsOneWay = true ) ]
-      void MUpdateResult( GAWebLib.Member aoMember );
-   }
-   */
+      void MOnUpdate( GAWebLib.Member[ ] aoMembers );
 
-   [ ServiceContract ]
+      [ OperationContract( IsOneWay = true ) ]
+      void MOnComplete( GAWebLib.Member[ ] aoMember );
+   }
+
+   [ ServiceContract ]//( CallbackContract = typeof( ICallback ) ]
    public interface IDistributor
    {
       [ OperationContract ]

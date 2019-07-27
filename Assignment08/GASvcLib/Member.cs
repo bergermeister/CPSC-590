@@ -5,9 +5,9 @@
    using System.Runtime.Serialization;
 
    [ DataContract ]
-   public class GAMember : IPopulationMember, IComparable, ICloneable
+   public class Member : IPopulationMember, IComparable, ICloneable
    {
-      public static int[ , ] ViDistMatrix; // common for all
+      public static int[ ][ ] ViDistMatrix; // common for all
 
       [ DataMember ]
       public int[ ] ViMem;   
@@ -20,7 +20,7 @@
         
       private static Random voRand = new Random( DateTime.Now.Millisecond );  // important otherwise all objects are identical
 
-      public GAMember( int aiSize, int[ , ] aiDMatrix )
+      public Member( int aiSize, int[ ][ ] aiDMatrix )
       {  
          ViDistMatrix = aiDMatrix;
 
@@ -32,7 +32,7 @@
 
       public object Clone( )
       {  // make a copy of self and return it in object
-         GAMember koMem = new GAMember( this.ViMemSize, ViDistMatrix );
+         Member koMem = new Member( this.ViMemSize, ViDistMatrix );
          for( int kiI = 0; kiI < koMem.ViMemSize; kiI++ )
          {
             koMem.ViMem[ kiI ] = this.ViMem[ kiI ];
@@ -56,10 +56,9 @@
 
       public int CompareTo( object aoRHS )  // for sorting
       {
-         GAMember koMR = ( GAMember )aoRHS;
+         Member koMR = ( Member )aoRHS;
          return( this.ViFitness.CompareTo( koMR.ViFitness ) );  // index 0 is best
       }
-
 
       #region IPopulationMember Members
 
@@ -87,10 +86,10 @@
 
       public void EvaluateMember( )
       {
-         this.ViFitness = ViDistMatrix[ ViMem[ 0 ], ViMem[ 1 ] ];
+         this.ViFitness = ViDistMatrix[ ViMem[ 0 ] ][ ViMem[ 1 ] ];
          for( int kiI = 1; kiI < this.ViMemSize - 1; kiI++ )
          {
-            this.ViFitness = this.ViFitness + ViDistMatrix[ this.ViMem[ kiI ], this.ViMem[ kiI + 1 ] ];
+            this.ViFitness = this.ViFitness + ViDistMatrix[ this.ViMem[ kiI ] ][ this.ViMem[ kiI + 1 ] ];
          }
       }
 

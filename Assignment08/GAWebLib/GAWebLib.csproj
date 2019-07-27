@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="IGeneticAlgorithm.cs" />
+    <Compile Include="Worker.cs" />
     <Compile Include="IPopulationMember.cs" />
     <Compile Include="Member.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

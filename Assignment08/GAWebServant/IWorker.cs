@@ -2,13 +2,16 @@
 {
    using System.ServiceModel;
    
-   [ ServiceContract ]
+   interface ICallback
+   {
+      [ OperationContract( IsOneWay = true ) ]
+      void MOnComplete( GAWebLib.Worker aoWorker );
+   }
+
+   [ ServiceContract( CallbackContract = typeof( ICallback ) ) ] // ( SessionMode = SessionMode.Required ) ]
    public interface IWorker
    {
       [ OperationContract ]
-      void MInitialize( int aiSizePop, int aiNumCities, float afRateMutate, float afRateCross, int[ ][ ] aiDistMat, int aiWorkerNum );
-
-      [ OperationContract ]
-      void MRun( int aiIterations );
+      void MRun( GAWebLib.Worker aoWorker, int aiIterations );
    }
 }

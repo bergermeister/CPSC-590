@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="c9d246cc-61ae-414b-b612-36fb960d531b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:51979/Worker.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Worker.disco" MetadataType="Disco" ID="22e7e0b4-fc56-44a0-ab30-647e57534342" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?disco" />
+    <MetadataFile FileName="Worker.wsdl" MetadataType="Wsdl" ID="e0c70822-04c4-46a2-b9c4-4f8088db6b29" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?wsdl" />
+    <MetadataFile FileName="Worker.xsd" MetadataType="Schema" ID="a171bd67-5405-4ef0-9c2c-a38c16bd223e" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?xsd=xsd0" />
+    <MetadataFile FileName="Worker1.xsd" MetadataType="Schema" ID="29282be4-6064-4352-9e0a-d1cda67fc444" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?xsd=xsd3" />
+    <MetadataFile FileName="Worker2.xsd" MetadataType="Schema" ID="c334c335-938a-4f11-8a8f-d45cd447ac9e" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?xsd=xsd2" />
+    <MetadataFile FileName="Worker3.xsd" MetadataType="Schema" ID="fced691a-ecea-40b5-9afb-bcf56061333c" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

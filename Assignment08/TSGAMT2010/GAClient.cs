@@ -11,7 +11,7 @@
          try
          {
             this.voProxy = new GA.GASvcClient( new System.ServiceModel.InstanceContext( this ), "GASVC" );
-            this.voProxy.MExecute(
+            //this.voProxy.MExecute(
          }
          catch( Exception koEx )
          {

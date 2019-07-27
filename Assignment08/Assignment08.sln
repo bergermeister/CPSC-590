@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GASvcHost", "GASvcHost\GASvcHost.csproj", "{71C52BBE-7C02-4BEF-BC55-9815FDA56258}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAWebClient", "GAWebClient\GAWebClient.csproj", "{EB357C65-A5CE-4FF6-81EC-7855C5460D75}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E119AE56-A595-4DEE-AAD9-E32CDBDBDF8A} = {E119AE56-A595-4DEE-AAD9-E32CDBDBDF8A}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAWebHost", "GAWebHost\GAWebHost.csproj", "{E119AE56-A595-4DEE-AAD9-E32CDBDBDF8A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -19,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAWebServant", "GAWebServant\GAWebServant.csproj", "{062D0F6E-F273-40BC-82B4-8A4DA269F775}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAWebLib", "GAWebLib\GAWebLib.csproj", "{9DBA6198-67F6-4E1C-8F79-10E8B4BE1A55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GASvcWorker1", "GASvcWorker1\GASvcWorker1.csproj", "{DFD49468-45D8-49BE-99E9-2EE098744779}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +87,14 @@ Global
 		{9DBA6198-67F6-4E1C-8F79-10E8B4BE1A55}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9DBA6198-67F6-4E1C-8F79-10E8B4BE1A55}.Release|x86.ActiveCfg = Release|Any CPU
 		{9DBA6198-67F6-4E1C-8F79-10E8B4BE1A55}.Release|x86.Build.0 = Release|Any CPU
+		{DFD49468-45D8-49BE-99E9-2EE098744779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFD49468-45D8-49BE-99E9-2EE098744779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD49468-45D8-49BE-99E9-2EE098744779}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DFD49468-45D8-49BE-99E9-2EE098744779}.Debug|x86.Build.0 = Debug|Any CPU
+		{DFD49468-45D8-49BE-99E9-2EE098744779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFD49468-45D8-49BE-99E9-2EE098744779}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD49468-45D8-49BE-99E9-2EE098744779}.Release|x86.ActiveCfg = Release|Any CPU
+		{DFD49468-45D8-49BE-99E9-2EE098744779}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-﻿namespace GASvcHost
+﻿namespace GASvcWorker1
 {
    using System;
    using System.ServiceModel;
@@ -11,8 +11,8 @@
 
          try             
          {                 
-            koSH = new ServiceHost( typeof( GASvcLib.Host.Distributor ) );                 
-            Console.WriteLine( "Genetic Algorithm Distributor Service Ready, Listening on 7060" );
+            koSH = new ServiceHost( typeof( GASvcLib.Servant.Worker ) );                 
+            Console.WriteLine( "Genetic Algorithm Worker 1 Service Ready, Listening on 7061" );
             Console.WriteLine( "Hit Enter to Stop.." );
             koSH.Open( );                 
             Console.ReadLine( );

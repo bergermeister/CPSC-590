@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/GAWebLib" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/GAWebLib" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:51979/Worker.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="Worker">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="vfRateCross" type="xs:float" />
+      <xs:element minOccurs="0" name="vfRateMutat" type="xs:float" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="viDistance" nillable="true" type="q1:ArrayOfArrayOfint" />
+      <xs:element minOccurs="0" name="viIter" type="xs:int" />
+      <xs:element minOccurs="0" name="viSizeMem" type="xs:int" />
+      <xs:element minOccurs="0" name="viSizePop" type="xs:int" />
+      <xs:element minOccurs="0" name="viWorkerNum" type="xs:int" />
+      <xs:element minOccurs="0" name="voBest" nillable="true" type="tns:Member" />
+      <xs:element minOccurs="0" name="voPopulation" nillable="true" type="tns:ArrayOfMember" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Worker" nillable="true" type="tns:Worker" />
+  <xs:complexType name="Member">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ViFitness" type="xs:int" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ViMem" nillable="true" type="q2:ArrayOfint" />
+      <xs:element minOccurs="0" name="ViMemSize" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Member" nillable="true" type="tns:Member" />
+  <xs:complexType name="ArrayOfMember">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Member" nillable="true" type="tns:Member" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMember" nillable="true" type="tns:ArrayOfMember" />
+</xs:schema>

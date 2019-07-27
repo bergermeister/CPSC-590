@@ -45,6 +45,7 @@
          this.lblThreadMonitored = new System.Windows.Forms.Label();
          this.picMap1 = new System.Windows.Forms.PictureBox();
          this.picMap0 = new System.Windows.Forms.PictureBox();
+         this.voTSGAWCF = new System.Windows.Forms.TabPage();
          this.statusStrip1 = new System.Windows.Forms.StatusStrip();
          this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
          this.lblStatus2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -71,7 +72,6 @@
          this.btnStopThreads = new System.Windows.Forms.Button();
          this.btnStartThreads = new System.Windows.Forms.Button();
          this.btnStartThreadsXchg = new System.Windows.Forms.Button();
-         this.voTSGAWCF = new System.Windows.Forms.TabPage();
          this.tabTSGA.SuspendLayout();
          this.tabTSGAST.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picMap)).BeginInit();
@@ -91,7 +91,7 @@
          this.tabTSGA.Controls.Add(this.tabTSGAMT);
          this.tabTSGA.Controls.Add(this.voTSGAWCF);
          this.tabTSGA.Location = new System.Drawing.Point(4, 32);
-         this.tabTSGA.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.tabTSGA.Margin = new System.Windows.Forms.Padding(2);
          this.tabTSGA.Name = "tabTSGA";
          this.tabTSGA.SelectedIndex = 0;
          this.tabTSGA.Size = new System.Drawing.Size(467, 413);
@@ -106,9 +106,9 @@
          this.tabTSGAST.Controls.Add(this.btnStartCapture);
          this.tabTSGAST.Controls.Add(this.picMap);
          this.tabTSGAST.Location = new System.Drawing.Point(4, 22);
-         this.tabTSGAST.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.tabTSGAST.Margin = new System.Windows.Forms.Padding(2);
          this.tabTSGAST.Name = "tabTSGAST";
-         this.tabTSGAST.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.tabTSGAST.Padding = new System.Windows.Forms.Padding(2);
          this.tabTSGAST.Size = new System.Drawing.Size(459, 387);
          this.tabTSGAST.TabIndex = 0;
          this.tabTSGAST.Text = "TSGA (Single Threaded)";
@@ -119,7 +119,7 @@
          this.btnStopGA.BackColor = System.Drawing.Color.Red;
          this.btnStopGA.ForeColor = System.Drawing.Color.White;
          this.btnStopGA.Location = new System.Drawing.Point(402, 5);
-         this.btnStopGA.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.btnStopGA.Margin = new System.Windows.Forms.Padding(2);
          this.btnStopGA.Name = "btnStopGA";
          this.btnStopGA.Size = new System.Drawing.Size(56, 24);
          this.btnStopGA.TabIndex = 5;
@@ -130,7 +130,7 @@
          // 
          this.btnRunGA.BackColor = System.Drawing.Color.White;
          this.btnRunGA.Location = new System.Drawing.Point(334, 5);
-         this.btnRunGA.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.btnRunGA.Margin = new System.Windows.Forms.Padding(2);
          this.btnRunGA.Name = "btnRunGA";
          this.btnRunGA.Size = new System.Drawing.Size(56, 24);
          this.btnRunGA.TabIndex = 1;
@@ -143,7 +143,7 @@
          this.btnEndCapture.BackColor = System.Drawing.Color.Blue;
          this.btnEndCapture.ForeColor = System.Drawing.Color.White;
          this.btnEndCapture.Location = new System.Drawing.Point(122, 5);
-         this.btnEndCapture.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.btnEndCapture.Margin = new System.Windows.Forms.Padding(2);
          this.btnEndCapture.Name = "btnEndCapture";
          this.btnEndCapture.Size = new System.Drawing.Size(110, 24);
          this.btnEndCapture.TabIndex = 4;
@@ -156,7 +156,7 @@
          this.btnStartCapture.BackColor = System.Drawing.Color.White;
          this.btnStartCapture.ForeColor = System.Drawing.Color.Black;
          this.btnStartCapture.Location = new System.Drawing.Point(4, 5);
-         this.btnStartCapture.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.btnStartCapture.Margin = new System.Windows.Forms.Padding(2);
          this.btnStartCapture.Name = "btnStartCapture";
          this.btnStartCapture.Size = new System.Drawing.Size(112, 24);
          this.btnStartCapture.TabIndex = 3;
@@ -167,7 +167,7 @@
          // picMap
          // 
          this.picMap.Location = new System.Drawing.Point(4, 33);
-         this.picMap.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.picMap.Margin = new System.Windows.Forms.Padding(2);
          this.picMap.Name = "picMap";
          this.picMap.Size = new System.Drawing.Size(454, 351);
          this.picMap.TabIndex = 0;
@@ -181,9 +181,9 @@
          this.tabTSGAMT.Controls.Add(this.picMap1);
          this.tabTSGAMT.Controls.Add(this.picMap0);
          this.tabTSGAMT.Location = new System.Drawing.Point(4, 22);
-         this.tabTSGAMT.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.tabTSGAMT.Margin = new System.Windows.Forms.Padding(2);
          this.tabTSGAMT.Name = "tabTSGAMT";
-         this.tabTSGAMT.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.tabTSGAMT.Padding = new System.Windows.Forms.Padding(2);
          this.tabTSGAMT.Size = new System.Drawing.Size(459, 387);
          this.tabTSGAMT.TabIndex = 1;
          this.tabTSGAMT.Text = "TSGA (Multi-Threaded)";
@@ -196,9 +196,9 @@
          this.groupBox3.Controls.Add(this.optT2);
          this.groupBox3.Controls.Add(this.optT1);
          this.groupBox3.Location = new System.Drawing.Point(359, 262);
-         this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
          this.groupBox3.Name = "groupBox3";
-         this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
          this.groupBox3.Size = new System.Drawing.Size(98, 122);
          this.groupBox3.TabIndex = 3;
          this.groupBox3.TabStop = false;
@@ -208,7 +208,7 @@
          // 
          this.optT4.AutoSize = true;
          this.optT4.Location = new System.Drawing.Point(4, 91);
-         this.optT4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.optT4.Margin = new System.Windows.Forms.Padding(2);
          this.optT4.Name = "optT4";
          this.optT4.Size = new System.Drawing.Size(68, 17);
          this.optT4.TabIndex = 7;
@@ -219,7 +219,7 @@
          // 
          this.optT3.AutoSize = true;
          this.optT3.Location = new System.Drawing.Point(4, 69);
-         this.optT3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.optT3.Margin = new System.Windows.Forms.Padding(2);
          this.optT3.Name = "optT3";
          this.optT3.Size = new System.Drawing.Size(68, 17);
          this.optT3.TabIndex = 6;
@@ -231,7 +231,7 @@
          this.optT2.AutoSize = true;
          this.optT2.Checked = true;
          this.optT2.Location = new System.Drawing.Point(4, 43);
-         this.optT2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.optT2.Margin = new System.Windows.Forms.Padding(2);
          this.optT2.Name = "optT2";
          this.optT2.Size = new System.Drawing.Size(68, 17);
          this.optT2.TabIndex = 5;
@@ -243,7 +243,7 @@
          // 
          this.optT1.AutoSize = true;
          this.optT1.Location = new System.Drawing.Point(4, 17);
-         this.optT1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.optT1.Margin = new System.Windows.Forms.Padding(2);
          this.optT1.Name = "optT1";
          this.optT1.Size = new System.Drawing.Size(68, 17);
          this.optT1.TabIndex = 4;
@@ -263,7 +263,7 @@
          // picMap1
          // 
          this.picMap1.Location = new System.Drawing.Point(11, 264);
-         this.picMap1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.picMap1.Margin = new System.Windows.Forms.Padding(2);
          this.picMap1.Name = "picMap1";
          this.picMap1.Size = new System.Drawing.Size(344, 123);
          this.picMap1.TabIndex = 1;
@@ -272,11 +272,20 @@
          // picMap0
          // 
          this.picMap0.Location = new System.Drawing.Point(11, 12);
-         this.picMap0.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.picMap0.Margin = new System.Windows.Forms.Padding(2);
          this.picMap0.Name = "picMap0";
          this.picMap0.Size = new System.Drawing.Size(446, 231);
          this.picMap0.TabIndex = 0;
          this.picMap0.TabStop = false;
+         // 
+         // voTSGAWCF
+         // 
+         this.voTSGAWCF.Location = new System.Drawing.Point(4, 22);
+         this.voTSGAWCF.Name = "voTSGAWCF";
+         this.voTSGAWCF.Size = new System.Drawing.Size(459, 387);
+         this.voTSGAWCF.TabIndex = 2;
+         this.voTSGAWCF.Text = "TSGA (WCF)";
+         this.voTSGAWCF.UseVisualStyleBackColor = true;
          // 
          // statusStrip1
          // 
@@ -339,9 +348,9 @@
          this.grpGASettings.Controls.Add(this.txtMutationRate);
          this.grpGASettings.Controls.Add(this.txtCrossOverRate);
          this.grpGASettings.Location = new System.Drawing.Point(476, 32);
-         this.grpGASettings.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.grpGASettings.Margin = new System.Windows.Forms.Padding(2);
          this.grpGASettings.Name = "grpGASettings";
-         this.grpGASettings.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.grpGASettings.Padding = new System.Windows.Forms.Padding(2);
          this.grpGASettings.Size = new System.Drawing.Size(239, 95);
          this.grpGASettings.TabIndex = 5;
          this.grpGASettings.TabStop = false;
@@ -389,7 +398,7 @@
          // txtMutationRate
          // 
          this.txtMutationRate.Location = new System.Drawing.Point(103, 72);
-         this.txtMutationRate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.txtMutationRate.Margin = new System.Windows.Forms.Padding(2);
          this.txtMutationRate.Name = "txtMutationRate";
          this.txtMutationRate.Size = new System.Drawing.Size(63, 20);
          this.txtMutationRate.TabIndex = 1;
@@ -397,7 +406,7 @@
          // txtCrossOverRate
          // 
          this.txtCrossOverRate.Location = new System.Drawing.Point(103, 47);
-         this.txtCrossOverRate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.txtCrossOverRate.Margin = new System.Windows.Forms.Padding(2);
          this.txtCrossOverRate.Name = "txtCrossOverRate";
          this.txtCrossOverRate.Size = new System.Drawing.Size(63, 20);
          this.txtCrossOverRate.TabIndex = 0;
@@ -410,9 +419,9 @@
          this.grpBestResult.Controls.Add(this.lblBestResult0);
          this.grpBestResult.Controls.Add(this.lblBestResult);
          this.grpBestResult.Location = new System.Drawing.Point(476, 144);
-         this.grpBestResult.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.grpBestResult.Margin = new System.Windows.Forms.Padding(2);
          this.grpBestResult.Name = "grpBestResult";
-         this.grpBestResult.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.grpBestResult.Padding = new System.Windows.Forms.Padding(2);
          this.grpBestResult.Size = new System.Drawing.Size(238, 301);
          this.grpBestResult.TabIndex = 6;
          this.grpBestResult.TabStop = false;
@@ -475,9 +484,9 @@
          this.grpThreads.Controls.Add(this.btnStartThreads);
          this.grpThreads.Controls.Add(this.btnStartThreadsXchg);
          this.grpThreads.Location = new System.Drawing.Point(480, 45);
-         this.grpThreads.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.grpThreads.Margin = new System.Windows.Forms.Padding(2);
          this.grpThreads.Name = "grpThreads";
-         this.grpThreads.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.grpThreads.Padding = new System.Windows.Forms.Padding(2);
          this.grpThreads.Size = new System.Drawing.Size(239, 95);
          this.grpThreads.TabIndex = 6;
          this.grpThreads.TabStop = false;
@@ -487,7 +496,7 @@
          // 
          this.opt4.AutoSize = true;
          this.opt4.Location = new System.Drawing.Point(7, 68);
-         this.opt4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.opt4.Margin = new System.Windows.Forms.Padding(2);
          this.opt4.Name = "opt4";
          this.opt4.Size = new System.Drawing.Size(73, 17);
          this.opt4.TabIndex = 11;
@@ -499,7 +508,7 @@
          this.opt3.AutoSize = true;
          this.opt3.Checked = true;
          this.opt3.Location = new System.Drawing.Point(7, 43);
-         this.opt3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.opt3.Margin = new System.Windows.Forms.Padding(2);
          this.opt3.Name = "opt3";
          this.opt3.Size = new System.Drawing.Size(73, 17);
          this.opt3.TabIndex = 10;
@@ -511,7 +520,7 @@
          // 
          this.opt2.AutoSize = true;
          this.opt2.Location = new System.Drawing.Point(7, 18);
-         this.opt2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.opt2.Margin = new System.Windows.Forms.Padding(2);
          this.opt2.Name = "opt2";
          this.opt2.Size = new System.Drawing.Size(73, 17);
          this.opt2.TabIndex = 9;
@@ -523,7 +532,7 @@
          this.btnStopThreads.BackColor = System.Drawing.Color.Red;
          this.btnStopThreads.ForeColor = System.Drawing.Color.White;
          this.btnStopThreads.Location = new System.Drawing.Point(94, 67);
-         this.btnStopThreads.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.btnStopThreads.Margin = new System.Windows.Forms.Padding(2);
          this.btnStopThreads.Name = "btnStopThreads";
          this.btnStopThreads.Size = new System.Drawing.Size(134, 23);
          this.btnStopThreads.TabIndex = 8;
@@ -535,7 +544,7 @@
          // 
          this.btnStartThreads.BackColor = System.Drawing.Color.White;
          this.btnStartThreads.Location = new System.Drawing.Point(94, 42);
-         this.btnStartThreads.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.btnStartThreads.Margin = new System.Windows.Forms.Padding(2);
          this.btnStartThreads.Name = "btnStartThreads";
          this.btnStartThreads.Size = new System.Drawing.Size(134, 20);
          this.btnStartThreads.TabIndex = 7;
@@ -548,22 +557,13 @@
          this.btnStartThreadsXchg.BackColor = System.Drawing.Color.White;
          this.btnStartThreadsXchg.ForeColor = System.Drawing.Color.Red;
          this.btnStartThreadsXchg.Location = new System.Drawing.Point(94, 15);
-         this.btnStartThreadsXchg.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.btnStartThreadsXchg.Margin = new System.Windows.Forms.Padding(2);
          this.btnStartThreadsXchg.Name = "btnStartThreadsXchg";
          this.btnStartThreadsXchg.Size = new System.Drawing.Size(134, 23);
          this.btnStartThreadsXchg.TabIndex = 6;
          this.btnStartThreadsXchg.Text = "Start Threads (Xchg)";
          this.btnStartThreadsXchg.UseVisualStyleBackColor = false;
          this.btnStartThreadsXchg.Click += new System.EventHandler(this.btnStartThreadsXchg_Click);
-         // 
-         // voTSGAWCF
-         // 
-         this.voTSGAWCF.Location = new System.Drawing.Point(4, 22);
-         this.voTSGAWCF.Name = "voTSGAWCF";
-         this.voTSGAWCF.Size = new System.Drawing.Size(459, 387);
-         this.voTSGAWCF.TabIndex = 2;
-         this.voTSGAWCF.Text = "TSGA (WCF)";
-         this.voTSGAWCF.UseVisualStyleBackColor = true;
          // 
          // Form1
          // 
@@ -576,7 +576,7 @@
          this.Controls.Add(this.label1);
          this.Controls.Add(this.statusStrip1);
          this.Controls.Add(this.tabTSGA);
-         this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+         this.Margin = new System.Windows.Forms.Padding(2);
          this.Name = "Form1";
          this.Text = "Form1";
          this.Load += new System.EventHandler(this.Form1_Load);

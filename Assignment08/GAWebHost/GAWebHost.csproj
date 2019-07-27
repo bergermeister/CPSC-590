@@ -70,28 +70,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Connected Services\GAWebServant\Worker.disco" />
-    <None Include="Connected Services\GAWebServant\configuration91.svcinfo" />
-    <None Include="Connected Services\GAWebServant\configuration.svcinfo" />
-    <None Include="Connected Services\GAWebServant\Reference.svcmap">
+    <None Include="Connected Services\Servant\Worker.disco" />
+    <None Include="Connected Services\Servant\configuration91.svcinfo" />
+    <None Include="Connected Services\Servant\configuration.svcinfo" />
+    <None Include="Connected Services\Servant\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <Content Include="Distributor.svc" />
     <Content Include="Web.config" />
-    <None Include="Connected Services\GAWebServant\Worker.wsdl" />
-    <None Include="Connected Services\GAWebServant\Worker.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\GAWebServant\Worker1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\GAWebServant\Worker2.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connected Services\GAWebServant\Reference.cs">
+    <Compile Include="Connected Services\Servant\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -100,9 +90,23 @@
       <DependentUpon>Distributor.svc</DependentUpon>
     </Compile>
     <Compile Include="IDistributor.cs" />
+    <Compile Include="Pair.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Connected Services\Servant\Worker.wsdl" />
+    <None Include="Connected Services\Servant\Worker.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\Servant\Worker1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\Servant\Worker2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\Servant\Worker3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -121,7 +125,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\GAWebServant\" />
+    <WCFMetadataStorage Include="Connected Services\Servant\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
