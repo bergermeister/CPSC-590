@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="63d19118-8d48-4bd0-92f4-fcc37a4255eb" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:51979/Worker.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Worker.disco" MetadataType="Disco" ID="de968c2e-6f3f-4d45-9ee5-b00a94d6d40a" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?disco" />
+    <MetadataFile FileName="Worker.wsdl" MetadataType="Wsdl" ID="53f2c555-503e-4c79-b51a-0fd3b45ef4eb" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?wsdl" />
+    <MetadataFile FileName="Worker.xsd" MetadataType="Schema" ID="56d9aa93-32aa-4b81-a2f5-cb75eba45cc7" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?xsd=xsd1" />
+    <MetadataFile FileName="Worker1.xsd" MetadataType="Schema" ID="1059f5a3-b84c-4bb2-889f-4db2a88de8c7" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?xsd=xsd2" />
+    <MetadataFile FileName="Worker2.xsd" MetadataType="Schema" ID="96aa7e00-d03e-4ba3-bf4c-1c0986cf236f" SourceId="1" SourceUrl="http://localhost:51979/Worker.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
