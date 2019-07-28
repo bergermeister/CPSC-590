@@ -126,29 +126,6 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="Distributor_MExecute_output_policy">
-    <wsp:ExactlyOne>
-      <wsp:All>
-        <sp:SignedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
-          <sp:Body />
-          <sp:Header Name="Sequence" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm" />
-          <sp:Header Name="SequenceAcknowledgement" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm" />
-          <sp:Header Name="AckRequested" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm" />
-          <sp:Header Name="ChannelInstance" Namespace="http://schemas.microsoft.com/ws/2005/02/duplex" />
-          <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing" />
-          <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing" />
-          <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing" />
-          <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing" />
-          <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing" />
-          <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing" />
-          <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing" />
-        </sp:SignedParts>
-        <sp:EncryptedParts xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
-          <sp:Body />
-        </sp:EncryptedParts>
-      </wsp:All>
-    </wsp:ExactlyOne>
-  </wsp:Policy>
   <wsp:Policy wsu:Id="Distributor_MOnUpdate_output_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -206,9 +183,6 @@
   <wsdl:message name="IDistributor_MExecute_InputMessage">
     <wsdl:part name="parameters" element="tns:MExecute" />
   </wsdl:message>
-  <wsdl:message name="IDistributor_MExecute_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MExecuteResponse" />
-  </wsdl:message>
   <wsdl:message name="IDistributor_MOnUpdate_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:MOnUpdate" />
   </wsdl:message>
@@ -218,7 +192,6 @@
   <wsdl:portType name="IDistributor">
     <wsdl:operation name="MExecute">
       <wsdl:input wsaw:Action="http://tempuri.org/IDistributor/MExecute" message="tns:IDistributor_MExecute_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IDistributor/MExecuteResponse" message="tns:IDistributor_MExecute_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MOnUpdate">
       <wsdl:output wsaw:Action="http://tempuri.org/IDistributor/MOnUpdate" message="tns:IDistributor_MOnUpdate_OutputCallbackMessage" />
@@ -236,10 +209,6 @@
         <wsp:PolicyReference URI="#Distributor_MExecute_Input_policy" />
         <soap12:body use="literal" />
       </wsdl:input>
-      <wsdl:output>
-        <wsp:PolicyReference URI="#Distributor_MExecute_output_policy" />
-        <soap12:body use="literal" />
-      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="MOnUpdate">
       <soap12:operation soapAction="http://tempuri.org/IDistributor/MOnUpdate" style="document" />
@@ -262,7 +231,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>http://localhost:51563/Distributor.svc/Distributor</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DESKTOP-MBVR3E3\edwar</Upn>
+          <Upn>EE-HPZBOOK\edwar</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

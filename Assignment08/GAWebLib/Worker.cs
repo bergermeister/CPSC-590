@@ -8,89 +8,83 @@
    [ DataContract ]
    public class Worker : IGeneticAlgorithm
    {
-      [ DataMember ]
-      public Member[ ] voPopulation; ///< Population Members
+      public static int[ ][ ] ViDistance; ///< Distance Matrix
 
       [ DataMember ]
-      public int viSizeMem; ///< Size of Members
+      public Member[ ] VoPopulation; ///< Population Members
 
       [ DataMember ]
-      public int viSizePop; ///< Size of Population
+      public int ViSizeMem; ///< Size of Members
 
       [ DataMember ]
-      public float vfRateMutat = 0.05f;   ///< Mutation Rate
+      public int ViSizePop; ///< Size of Population
 
       [ DataMember ]
-      public float vfRateCross = 0.50f;   ///< Crossover Rate
+      public float VfRateMutat = 0.05f;   ///< Mutation Rate
 
       [ DataMember ]
-      public int[ ][ ] viDistance; ///< Distance Matrix
+      public float VfRateCross = 0.50f;   ///< Crossover Rate
 
       [ DataMember ]
-      public Member voBest; ///< Best Member
+      public Member VoBest; ///< Best Member
       
       [ DataMember ]
-      public int viIter; ///< Iteration Count
+      public int ViIter; ///< Iteration Count
 
       [ DataMember ]
-      public int viWorkerNum;
+      public int ViWorkerNum;
 
-      public void MInitialize( int aiSizePop, int aiNumCities, float afRateMutate, float afRateCross, int[ ][ ] aiDistMat, int aiWorkerNum ) 
+      public void MInitialize( int aiSizePop, int aiNumCities, float afRateMutate, float afRateCross, int aiWorkerNum ) 
       {
-         this.vfRateMutat  = afRateMutate;
-         this.viSizeMem    = aiNumCities + 1; // start and end city is 0
-         this.vfRateCross  = afRateCross;
+         this.VfRateMutat  = afRateMutate;
+         this.ViSizeMem    = aiNumCities + 1; // start and end city is 0
+         this.VfRateCross  = afRateCross;
 
-         this.viDistance = new int[ aiDistMat.Length ][ ];
-         Parallel.For( 0, aiDistMat.Length, ( i ) =>
-         {
-            this.viDistance[ i ] = new int[ aiDistMat[ i ].Length ];
-            for( int j = 0; j < aiDistMat[ i ].Length; j++ )
-            {
-               this.viDistance[ i ][ j ] = aiDistMat[ i ][ j ];
-            }
-         } );
-
-         this.voPopulation = new Member[ aiSizePop ];
+         this.VoPopulation = new Member[ aiSizePop ];
          for( int i = 0; i < aiSizePop; i++ )
          {
-            this.voPopulation[i] = new Member( viSizeMem, viDistance );
+            this.VoPopulation[i] = new Member( ViSizeMem );
          } 
-         this.viSizePop = aiSizePop;
+         this.ViSizePop = aiSizePop;
 
-         this.viWorkerNum  = aiWorkerNum;
+         this.ViWorkerNum  = aiWorkerNum;
          
          this.MInitializePopulation( );
          this.MEvaluatePopulation( );
-         Array.Sort( this.voPopulation );                 // sort population
+         Array.Sort( this.VoPopulation );                 // sort population
       }
 
       public void MRun( int aiIterations )
       {
-         int kiBestFitness = this.voPopulation[ 0 ].ViFitness;
-         voBest = ( Member )voPopulation[ 0 ].Clone( );
+         int kiBestFitness = this.VoPopulation[ 0 ].ViFitness;
+         
+         this.VoBest = ( Member )this.VoPopulation[ 0 ].Clone( );
 
-         for (int j = 0; j < aiIterations; j++)
+         for( int j = 0; j < aiIterations; j++ )
          {
             // each loop is one generation
             this.MSelectPopulation( );
             this.MCrossoverPopulation( );
             this.MEvaluatePopulation( );
-            Array.Sort( this.voPopulation );  // sort population
+            Array.Sort( this.VoPopulation );  // sort population
 
-            if( this.voPopulation[ 0 ].ViFitness < this.voBest.ViFitness )
+            if( this.VoPopulation[ 0 ].ViFitness < this.VoBest.ViFitness )
             {
-               this.voBest = ( Member )voPopulation[ 0 ].Clone( );
+               this.VoBest = ( Member )VoPopulation[ 0 ].Clone( );
             }
-            viIter = j;
+            this.ViIter = j;
 
-            this.MMutatePopulation( );
-            this.MEvaluatePopulation( );
-            Array.Sort( this.voPopulation );  // sort population
-
-            if( this.voPopulation[ 0 ].ViFitness < kiBestFitness )
+            // Let the distributor handle the last evaluation after exchange
+            if( j < ( aiIterations - 1 ) )
             {
-               kiBestFitness = voPopulation[ 0 ].ViFitness;
+               this.MMutatePopulation( );
+               this.MEvaluatePopulation( );
+               Array.Sort( this.VoPopulation );  // sort population
+
+               if( this.VoPopulation[ 0 ].ViFitness < kiBestFitness )
+               {
+                  kiBestFitness = VoPopulation[ 0 ].ViFitness;
+               }
             }
          }
       }
@@ -99,9 +93,9 @@
 
       public void MInitializePopulation()
       {
-         for( int i = 0; i < this.viSizePop; i++ )
+         for( int i = 0; i < this.ViSizePop; i++ )
          {
-            this.voPopulation[ i ].InitializeMember( );
+            this.VoPopulation[ i ].InitializeMember( );
             //for (int j = 1; j < viSizeMem - 1; j++)
             //{
             //   if (voPopulation[i].ViMem[j] == 0)
@@ -114,9 +108,9 @@
 
       public void MEvaluatePopulation( )
       {
-         for( int i = 0; i < this.viSizePop; i++ )
+         for( int i = 0; i < this.ViSizePop; i++ )
          {
-            this.voPopulation[ i ].EvaluateMember( );
+            this.VoPopulation[ i ].EvaluateMember( );
          }
       }
 
@@ -126,9 +120,9 @@
          
          // Drop 30% of population. Duplicate top 30% of population.
          j = 0;  
-         for( i = ( int )( 0.7 * this.viSizePop ); i < this.viSizePop; i++ )
+         for( i = ( int )( 0.7 * this.ViSizePop ); i < this.ViSizePop; i++ )
          {
-            this.voPopulation[ i ] = ( Member )( this.voPopulation[ j ].Clone( ) );
+            this.VoPopulation[ i ] = ( Member )( this.VoPopulation[ j ].Clone( ) );
             j = j + 1;
          }
       }
@@ -147,25 +141,25 @@
          Hashtable koHash1 = new Hashtable();
          Hashtable koHash2 = new Hashtable();
 
-         for( kiI = 0; kiI < ( this.viSizePop * 10 ); kiI++)
+         for( kiI = 0; kiI < ( this.ViSizePop * 10 ); kiI++)
          {
-            kiPos1 = ( int )( koRand.NextDouble( ) * this.viSizePop );
-            if( kiPos1 == this.viSizePop )
+            kiPos1 = ( int )( koRand.NextDouble( ) * this.ViSizePop );
+            if( kiPos1 == this.ViSizePop )
             {
-               kiPos1 = this.viSizePop - 1;
+               kiPos1 = this.ViSizePop - 1;
             }
 
-            kiPos2 = ( int )( koRand.NextDouble( ) * this.viSizePop );
-            if( kiPos2 == this.viSizePop )
+            kiPos2 = ( int )( koRand.NextDouble( ) * this.ViSizePop );
+            if( kiPos2 == this.ViSizePop )
             {
-               kiPos2 = this.viSizePop - 1;
+               kiPos2 = this.ViSizePop - 1;
             }
 
             if( kiPos1 != kiPos2 )
             {
-               koTemp = this.voPopulation[ kiPos1 ];
-               this.voPopulation[ kiPos1 ] = this.voPopulation[ kiPos2 ];
-               this.voPopulation[ kiPos2 ] = koTemp;
+               koTemp = this.VoPopulation[ kiPos1 ];
+               this.VoPopulation[ kiPos1 ] = this.VoPopulation[ kiPos2 ];
+               this.VoPopulation[ kiPos2 ] = koTemp;
             }
          }
 
@@ -173,18 +167,19 @@
          // First parent starts from the beginning, second from
          // middle, recall the population has already been mixed up.
          
-         for( kiI = 0; kiI < ( int )( ( this.vfRateCross / 2.0f ) * this.viSizePop ); kiI++ )
+         for( kiI = 0; kiI < ( int )( ( this.VfRateCross / 2.0f ) * this.ViSizePop ); kiI++ )
          {
-            kiPar1 = kiI; kiPar2 = kiI + ( int )( 0.5 * this.viSizePop );
-            koCross1 = ( Member )this.voPopulation[ kiPar1 ].Clone( );
-            koCross2 = ( Member )this.voPopulation[ kiPar2 ].Clone( );
+            kiPar1 = kiI; 
+            kiPar2 = kiI + ( int )( 0.5 * this.ViSizePop );
+            koCross1 = ( Member )this.VoPopulation[ kiPar1 ].Clone( );
+            koCross2 = ( Member )this.VoPopulation[ kiPar2 ].Clone( );
 
             //--------------transferring Genes to children -----------
             // 1/4 to 3/4 cut is made to transfer 1/2 tour to a child
             // rest of the information is transferred in cyclic order
             // from the other parent
-            kiCut1 = ( int )Math.Ceiling( this.viSizeMem / 4.0 );
-            kiCut2 = ( int )Math.Floor( this.viSizeMem * 3.0 / 4.0 );
+            kiCut1 = ( int )Math.Ceiling( this.ViSizeMem / 4.0 );
+            kiCut2 = ( int )Math.Floor( this.ViSizeMem * 3.0 / 4.0 );
             koHash1.Clear( );
             koHash2.Clear( );
             for( kiJ = kiCut1; kiJ < kiCut2; kiJ++ )
@@ -196,47 +191,47 @@
             }
             koCross1.ViMem[ 0 ] = 0; 
             koHash1.Add( 0, -1 );
-            koCross1.ViMem[ this.viSizeMem - 1 ] = 0; // start, end city is 0
+            koCross1.ViMem[ this.ViSizeMem - 1 ] = 0; // start, end city is 0
             koCross2.ViMem[ 0 ] = 0; 
             koHash2.Add( 0, -1 );
-            koCross2.ViMem[ this.viSizeMem - 1 ] = 0; // start, end city is 0
+            koCross2.ViMem[ this.ViSizeMem - 1 ] = 0; // start, end city is 0
 
             // now do a circular addition of tour from the second parent
             kiStartPos = 1;
             for( kiJ = 1; kiJ < kiCut1; kiJ++ )
             {
-               for( kiK = 0; kiK < this.viSizeMem; kiK++ )
+               for( kiK = 0; kiK < this.ViSizeMem; kiK++ )
                { 
-                  if( ( koHash1.Contains( this.voPopulation[ kiPar2 ].ViMem[ kiStartPos ] ) ) == false )
+                  if( ( koHash1.Contains( this.VoPopulation[ kiPar2 ].ViMem[ kiStartPos ] ) ) == false )
                   {
-                     koHash1.Add( this.voPopulation[ kiPar2 ].ViMem[ kiStartPos ], -1 );
-                     koCross1.ViMem[ kiJ ] = this.voPopulation[ kiPar2 ].ViMem[ kiStartPos ];
-                     kiStartPos = ( kiStartPos + 1 ) % this.viSizeMem;
+                     koHash1.Add( this.VoPopulation[ kiPar2 ].ViMem[ kiStartPos ], -1 );
+                     koCross1.ViMem[ kiJ ] = this.VoPopulation[ kiPar2 ].ViMem[ kiStartPos ];
+                     kiStartPos = ( kiStartPos + 1 ) % this.ViSizeMem;
                      break;
                   }
                   else
                   {
-                     kiStartPos = ( kiStartPos + 1 ) % this.viSizeMem;
+                     kiStartPos = ( kiStartPos + 1 ) % this.ViSizeMem;
                   }
                }
             }
 
             //---from cut2 to memSize-1, copy second parent's genes
             //startpos = cut2;
-            for( kiJ = kiCut2; kiJ < this.viSizeMem - 1; kiJ++ )
+            for( kiJ = kiCut2; kiJ < this.ViSizeMem - 1; kiJ++ )
             {
-               for( kiK = 0; kiK < this.viSizeMem; kiK++ )
+               for( kiK = 0; kiK < this.ViSizeMem; kiK++ )
                {
-                  if( ( koHash1.Contains( this.voPopulation[ kiPar2 ].ViMem[ kiStartPos ] ) ) == false )
+                  if( ( koHash1.Contains( this.VoPopulation[ kiPar2 ].ViMem[ kiStartPos ] ) ) == false )
                   {
-                     koHash1.Add( this.voPopulation[ kiPar2 ].ViMem[ kiStartPos ], -1 );
-                     koCross1.ViMem[ kiJ ] = this.voPopulation[ kiPar2 ].ViMem[ kiStartPos ];
-                     kiStartPos = ( kiStartPos + 1 ) % this.viSizeMem;
+                     koHash1.Add( this.VoPopulation[ kiPar2 ].ViMem[ kiStartPos ], -1 );
+                     koCross1.ViMem[ kiJ ] = this.VoPopulation[ kiPar2 ].ViMem[ kiStartPos ];
+                     kiStartPos = ( kiStartPos + 1 ) % this.ViSizeMem;
                      break;
                   }
                   else
                   {
-                     kiStartPos = ( kiStartPos + 1 ) % this.viSizeMem;
+                     kiStartPos = ( kiStartPos + 1 ) % this.ViSizeMem;
                   }
                }
             }
@@ -245,46 +240,46 @@
             kiStartPos = 1;
             for( kiJ = 1; kiJ < kiCut1; kiJ++ )
             {
-               for( kiK = 0; kiK < this.viSizeMem; kiK++ )
+               for( kiK = 0; kiK < this.ViSizeMem; kiK++ )
                {
-                  if( ( koHash2.Contains( this.voPopulation[ kiPar1 ].ViMem[ kiStartPos ] ) ) == false )
+                  if( ( koHash2.Contains( this.VoPopulation[ kiPar1 ].ViMem[ kiStartPos ] ) ) == false )
                   {
-                     koHash2.Add( this.voPopulation[ kiPar1 ].ViMem[ kiStartPos ], -1 );
-                     koCross2.ViMem[ kiJ ] = this.voPopulation[ kiPar1 ].ViMem[ kiStartPos ];
-                     kiStartPos = ( kiStartPos + 1 ) % this.viSizeMem;
+                     koHash2.Add( this.VoPopulation[ kiPar1 ].ViMem[ kiStartPos ], -1 );
+                     koCross2.ViMem[ kiJ ] = this.VoPopulation[ kiPar1 ].ViMem[ kiStartPos ];
+                     kiStartPos = ( kiStartPos + 1 ) % this.ViSizeMem;
                      break;
                   }
                   else
                   {
-                     kiStartPos = ( kiStartPos + 1 ) % this.viSizeMem;
+                     kiStartPos = ( kiStartPos + 1 ) % this.ViSizeMem;
                   }
                }
             }
 
             //---from cut2 to memSize-1, copy first parent's genes
             kiStartPos = kiCut2;
-            for( kiJ = kiCut2; kiJ < ( this.viSizeMem - 1 ); kiJ++ )
+            for( kiJ = kiCut2; kiJ < ( this.ViSizeMem - 1 ); kiJ++ )
             {
-               for( kiK = 0; kiK < this.viSizeMem; kiK++ )
+               for( kiK = 0; kiK < this.ViSizeMem; kiK++ )
                {
-                  if( ( koHash2.Contains( this.voPopulation[ kiPar1 ].ViMem[ kiStartPos ] ) ) == false )
+                  if( ( koHash2.Contains( this.VoPopulation[ kiPar1 ].ViMem[ kiStartPos ] ) ) == false )
                   {
-                     koHash2.Add( this.voPopulation[ kiPar1 ].ViMem[ kiStartPos ], -1 );
-                     koCross2.ViMem[ kiJ ] = this.voPopulation[ kiPar1 ].ViMem[ kiStartPos ];
-                     kiStartPos = ( kiStartPos + 1 ) % this.viSizeMem;
+                     koHash2.Add( this.VoPopulation[ kiPar1 ].ViMem[ kiStartPos ], -1 );
+                     koCross2.ViMem[ kiJ ] = this.VoPopulation[ kiPar1 ].ViMem[ kiStartPos ];
+                     kiStartPos = ( kiStartPos + 1 ) % this.ViSizeMem;
                      break;
                   }
                   else
                   {
-                     kiStartPos = ( kiStartPos + 1 ) % this.viSizeMem;
+                     kiStartPos = ( kiStartPos + 1 ) % this.ViSizeMem;
                   }
                }
             }
 
-            this.voPopulation[ kiPar1 ] = koCross1;   // parents p1, p2 are replaced by their children
-            this.voPopulation[ kiPar2 ] = koCross2;
-            this.voPopulation[ kiPar1 ].EvaluateMember( );
-            this.voPopulation[ kiPar2 ].EvaluateMember( );
+            this.VoPopulation[ kiPar1 ] = koCross1;   // parents p1, p2 are replaced by their children
+            this.VoPopulation[ kiPar2 ] = koCross2;
+            this.VoPopulation[ kiPar1 ].EvaluateMember( );
+            this.VoPopulation[ kiPar2 ].EvaluateMember( );
          }
       }
 
@@ -295,14 +290,14 @@
          int    kiXPos, kiTemp;
          bool   kbRandomXChange;
 
-         for( int i = 0; i < ( int )( this.viSizePop * this.viSizeMem * this.vfRateMutat ); i++ )
+         for( int i = 0; i < ( int )( this.ViSizePop * this.ViSizeMem * this.VfRateMutat ); i++ )
          {
             kiPos = 0;
-            while( ( kiPos == 0) || ( kiPos == ( viSizeMem - 1 ) ) )
+            while( ( kiPos == 0) || ( kiPos == ( ViSizeMem - 1 ) ) )
             {
-               kiRNum = ( int )( this.viSizePop * this.viSizeMem * koRand.NextDouble( ) );
-               kiPos = kiRNum % this.viSizeMem;
-               kiPopNum = ( kiRNum / viSizeMem );
+               kiRNum = ( int )( this.ViSizePop * this.ViSizeMem * koRand.NextDouble( ) );
+               kiPos = kiRNum % this.ViSizeMem;
+               kiPopNum = ( kiRNum / ViSizeMem );
             }
 
             //---exchange with the previous neighbor, but sometimes
@@ -315,22 +310,22 @@
                if( kiPos > 2 )
                {
                   kiXPos = kiPos - 1;
-                  kiTemp = voPopulation[ kiPopNum ].ViMem[ kiPos ];
-                  this.voPopulation[ kiPopNum ].ViMem[ kiPos ] = this.voPopulation[ kiPopNum ].ViMem[ kiXPos ];
-                  this.voPopulation[ kiPopNum ].ViMem[ kiXPos ] = kiTemp;
+                  kiTemp = VoPopulation[ kiPopNum ].ViMem[ kiPos ];
+                  this.VoPopulation[ kiPopNum ].ViMem[ kiPos ] = this.VoPopulation[ kiPopNum ].ViMem[ kiXPos ];
+                  this.VoPopulation[ kiPopNum ].ViMem[ kiXPos ] = kiTemp;
                   kbRandomXChange = false;
                }
             }
             if( kbRandomXChange == true )
             {
                kiXPos = 0;
-               while( ( kiXPos == 0) || ( kiXPos == this.viSizeMem ) || ( kiXPos == ( this.viSizeMem - 1 ) ) )
+               while( ( kiXPos == 0) || ( kiXPos == this.ViSizeMem ) || ( kiXPos == ( this.ViSizeMem - 1 ) ) )
                {
-                  kiXPos = ( int )( koRand.NextDouble( ) * viSizeMem );
+                  kiXPos = ( int )( koRand.NextDouble( ) * ViSizeMem );
                }
-               kiTemp = voPopulation[ kiPopNum ].ViMem[ kiPos ];
-               voPopulation[ kiPopNum ].ViMem[ kiPos ] = voPopulation[ kiPopNum ].ViMem[ kiXPos ];
-               voPopulation[ kiPopNum ].ViMem[ kiXPos ] = kiTemp;
+               kiTemp = VoPopulation[ kiPopNum ].ViMem[ kiPos ];
+               VoPopulation[ kiPopNum ].ViMem[ kiPos ] = VoPopulation[ kiPopNum ].ViMem[ kiXPos ];
+               VoPopulation[ kiPopNum ].ViMem[ kiXPos ] = kiTemp;
             }
          }
       }
@@ -339,36 +334,35 @@
 
       public void printPopulation()
       {
-         for( int i = 0; i < this.viSizePop; i++ )
+         for( int i = 0; i < this.ViSizePop; i++ )
          {
-            this.voPopulation[ i ].ToString( );
+            this.VoPopulation[ i ].ToString( );
          }
       }
 
       public Member this[ int aiMember ]  // creating indexer
       {
-         get { return( this.voPopulation[ aiMember ] ); }
-         set { this.voPopulation[ aiMember ] = ( Member )value; }
+         get { return( this.VoPopulation[ aiMember ] ); }
+         set { this.VoPopulation[ aiMember ] = ( Member )value; }
       }
 
       public object Clone( )
       {
          Worker koWorker = new Worker( );
 
-         koWorker.voPopulation = new Member[ this.voPopulation.Length ];
-         for( int i = 0; i < this.voPopulation.Length; i++ )
+         koWorker.VoPopulation = new Member[ this.VoPopulation.Length ];
+         for( int i = 0; i < this.VoPopulation.Length; i++ )
          {
-            koWorker.voPopulation[ i ] = ( Member )this.voPopulation[ i ].Clone( );
+            koWorker.VoPopulation[ i ] = ( Member )this.VoPopulation[ i ].Clone( );
          }
 
-         koWorker.viSizeMem   = this.viSizeMem;
-         koWorker.viSizePop   = this.viSizePop;
-         koWorker.vfRateMutat = this.vfRateMutat;
-         koWorker.vfRateCross = this.vfRateCross;
-         koWorker.viDistance  = this.viDistance;
-         koWorker.voBest      = this.voBest; 
-         koWorker.viIter      = this.viIter; 
-         koWorker.viWorkerNum = this.viWorkerNum;
+         koWorker.ViSizeMem   = this.ViSizeMem;
+         koWorker.ViSizePop   = this.ViSizePop;
+         koWorker.VfRateMutat = this.VfRateMutat;
+         koWorker.VfRateCross = this.VfRateCross;
+         koWorker.VoBest      = this.VoBest; 
+         koWorker.ViIter      = this.ViIter; 
+         koWorker.ViWorkerNum = this.ViWorkerNum;
 
          return( koWorker );
       }

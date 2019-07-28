@@ -15,10 +15,10 @@ namespace GAWebClient.Host {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="Host.IDistributor", CallbackContract=typeof(GAWebClient.Host.IDistributorCallback))]
     public interface IDistributor {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDistributor/MExecute", ReplyAction="http://tempuri.org/IDistributor/MExecuteResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IDistributor/MExecute")]
         void MExecute(int[][] aiDistMat, int aiNumWorkers);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IDistributor/MExecute", ReplyAction="http://tempuri.org/IDistributor/MExecuteResponse")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IDistributor/MExecute")]
         System.Threading.Tasks.Task MExecuteAsync(int[][] aiDistMat, int aiNumWorkers);
     }
     

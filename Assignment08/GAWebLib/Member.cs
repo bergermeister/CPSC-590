@@ -20,10 +20,8 @@
         
       private static Random voRand = new Random( DateTime.Now.Millisecond );  // important otherwise all objects are identical
 
-      public Member( int aiSize, int[ ][ ] aiDMatrix )
+      public Member( int aiSize )
       {  
-         ViDistMatrix = aiDMatrix;
-
          this.ViMemSize = aiSize;  // start and end city are the same
          this.ViMem = new int[ ViMemSize ];
          this.InitializeMember( );
@@ -32,7 +30,7 @@
 
       public object Clone( )
       {  // make a copy of self and return it in object
-         Member koMem = new Member( this.ViMemSize, ViDistMatrix );
+         Member koMem = new Member( this.ViMemSize );
          for( int kiI = 0; kiI < koMem.ViMemSize; kiI++ )
          {
             koMem.ViMem[ kiI ] = this.ViMem[ kiI ];

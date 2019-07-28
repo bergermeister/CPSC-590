@@ -10,11 +10,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="MExecuteResponse">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
   <xs:element name="MOnUpdate">
     <xs:complexType>
       <xs:sequence>

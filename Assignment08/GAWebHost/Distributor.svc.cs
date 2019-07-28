@@ -20,18 +20,25 @@
 
          try
          {
+            Console.WriteLine( "{0} - Distributor: START", DateTime.Now );
+
             koChannel = OperationContext.Current.GetCallbackChannel< ICallback >( );
          
             /// -# Copy the distance matrix
             this.viDistance = new int[ aiDistMat.Length ][ ];
-            Parallel.For( 0, aiDistMat.Length, ( i ) =>
+            for( int i = 0; i < aiDistMat.Length; i++ )
+            //Parallel.For( 0, aiDistMat.Length, ( i ) =>
             {
                this.viDistance[ i ] = new int[ aiDistMat[ i ].Length ];
                for( int j = 0; j < aiDistMat[ i ].Length; j++ )
                {
                   this.viDistance[ i ][ j ] = aiDistMat[ i ][ j ];
                }
-            } );
+            } //);
+
+            /// -# Setup the Distance Matrix for the workers
+            Member.ViDistMatrix = this.viDistance;
+            Worker.ViDistance   = this.viDistance;
 
             /// -# Store the number of Workers
             this.viNumWorkers = aiNumWorkers;
@@ -44,15 +51,17 @@
 
             /// -# Update the Constants
             Constants.NumCities = aiDistMat.Length;
-         
+
             /// -# Initialize Workers
-            Parallel.For( 0, this.viNumWorkers, ( kiI ) =>
+            for( int kiI = 0; kiI < this.viNumWorkers; kiI++ )
             {
-               this.voWorkers[ kiI ] = new Pair< Worker, bool >( new Worker( ), false );
-               this.voWorkers[ kiI ].VoItem1.MInitialize( Constants.PopSize, Constants.NumCities, 
-                                                          Constants.MutationRate, Constants.CrossoverRate,
-                                                          this.viDistance, kiI );
-            } );
+               this.voWorkers.Add( new Pair< Worker, bool >( new Worker( ), false ) );
+               this.voWorkers[ kiI ].VoItem1.MInitialize( Constants.PopSize, 
+                                                          Constants.NumCities, 
+                                                          Constants.MutationRate, 
+                                                          Constants.CrossoverRate, 
+                                                          kiI );
+            }
 
             /// -# Distribute the work load
             for( int kiIter = 0; kiIter < Constants.NumIterations; kiIter += Constants.ExchangeAfterIterations )
@@ -61,7 +70,7 @@
                for( int kiI = 0; kiI < this.viNumWorkers; kiI++ )
                {
                   koClient = new Servant.WorkerClient( new InstanceContext( this ), "Worker" );
-                  koClient.MRun( this.voWorkers[ kiI ].VoItem1, Constants.ExchangeAfterIterations );
+                  koClient.MRun( this.voWorkers[ kiI ].VoItem1, this.viDistance, Constants.ExchangeAfterIterations );
                }
 
                /// -# Wait for the workers to complete
@@ -69,17 +78,25 @@
                {
                   while( !this.voWorkers[ kiI ].VoItem2 );
                   this.voWorkers[ kiI ].VoItem2 = false;
-                  koBest[ kiI ] = this.voWorkers[ kiI ].VoItem1.voBest;
+                  koBest[ kiI ] = this.voWorkers[ kiI ].VoItem1.VoBest;
                }
 
                /// -# Send Update to client
                koChannel.MOnUpdate( koBest );
+               Console.WriteLine( "{0} - Distributor: UPDATE", DateTime.Now );
 
-               this.mExchangeData( );            
+               this.mExchangeData( );       
+               for( int kiI = 0; kiI < this.viNumWorkers; kiI++ )
+               {
+                  this.voWorkers[ kiI ].VoItem1.MMutatePopulation( );
+                  this.voWorkers[ kiI ].VoItem1.MEvaluatePopulation( );
+                  Array.Sort( this.voWorkers[ kiI ].VoItem1.VoPopulation );
+               }
             }
 
             /// -# Return the best of each worker
             koChannel.MOnComplete( koBest );
+            Console.WriteLine( "{0} - Distributor: END", DateTime.Now );
          }
          catch( Exception aoEx )
          {
@@ -89,8 +106,9 @@
 
       public void MOnComplete( Worker aoWorker )
       {
-         this.voWorkers[ aoWorker.viWorkerNum ].VoItem1 = aoWorker;
-         this.voWorkers[ aoWorker.viWorkerNum ].VoItem2 = true;
+         Console.WriteLine( "{0} - Distributor: WORKER {1} COMPLETE", DateTime.Now, aoWorker.ViWorkerNum );
+         this.voWorkers[ aoWorker.ViWorkerNum ].VoItem1 = aoWorker;
+         this.voWorkers[ aoWorker.ViWorkerNum ].VoItem2 = true;
       }
 
       private void mExchangeData( )
@@ -117,9 +135,9 @@
             {
                kiM1 = ( int )( koRand.NextDouble( ) * Constants.PopSize );
                kiM2 = ( int )( koRand.NextDouble( ) * Constants.PopSize );
-               koTemp = this.voWorkers[ kiW1 ].VoItem1.voPopulation[ kiM1 ];
-               this.voWorkers[ kiW1 ].VoItem1.voPopulation[ kiM1 ] = this.voWorkers[ kiW2 ].VoItem1.voPopulation[ kiM2 ];
-               this.voWorkers[ kiW2 ].VoItem1.voPopulation[ kiM2 ] = koTemp;
+               koTemp = this.voWorkers[ kiW1 ].VoItem1.VoPopulation[ kiM1 ];
+               this.voWorkers[ kiW1 ].VoItem1.VoPopulation[ kiM1 ] = this.voWorkers[ kiW2 ].VoItem1.VoPopulation[ kiM2 ];
+               this.voWorkers[ kiW2 ].VoItem1.VoPopulation[ kiM2 ] = koTemp;
             }
          }
       }

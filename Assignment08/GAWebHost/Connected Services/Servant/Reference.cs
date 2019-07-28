@@ -15,11 +15,11 @@ namespace GAWebHost.Servant {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="Servant.IWorker", CallbackContract=typeof(GAWebHost.Servant.IWorkerCallback))]
     public interface IWorker {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWorker/MRun", ReplyAction="http://tempuri.org/IWorker/MRunResponse")]
-        void MRun(GAWebLib.Worker aoWorker, int aiIterations);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IWorker/MRun")]
+        void MRun(GAWebLib.Worker aoWorker, int[][] aiDistMat, int aiIterations);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWorker/MRun", ReplyAction="http://tempuri.org/IWorker/MRunResponse")]
-        System.Threading.Tasks.Task MRunAsync(GAWebLib.Worker aoWorker, int aiIterations);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IWorker/MRun")]
+        System.Threading.Tasks.Task MRunAsync(GAWebLib.Worker aoWorker, int[][] aiDistMat, int aiIterations);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -57,12 +57,12 @@ namespace GAWebHost.Servant {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void MRun(GAWebLib.Worker aoWorker, int aiIterations) {
-            base.Channel.MRun(aoWorker, aiIterations);
+        public void MRun(GAWebLib.Worker aoWorker, int[][] aiDistMat, int aiIterations) {
+            base.Channel.MRun(aoWorker, aiDistMat, aiIterations);
         }
         
-        public System.Threading.Tasks.Task MRunAsync(GAWebLib.Worker aoWorker, int aiIterations) {
-            return base.Channel.MRunAsync(aoWorker, aiIterations);
+        public System.Threading.Tasks.Task MRunAsync(GAWebLib.Worker aoWorker, int[][] aiDistMat, int aiIterations) {
+            return base.Channel.MRunAsync(aoWorker, aiDistMat, aiIterations);
         }
     }
 }

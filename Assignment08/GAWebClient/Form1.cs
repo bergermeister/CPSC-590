@@ -3,7 +3,6 @@
    using System;
    using System.Collections;
    using System.Drawing;
-   using System.Threading.Tasks;
    using System.Windows.Forms;
 
    public partial class Form1 : Form
@@ -12,7 +11,7 @@
       private Bitmap    voOrig = null;
       private Bitmap    voWork = null;
       private ArrayList voPoints = new ArrayList( );
-      private int[ , ]  viDistMat = null;      
+      private Client    voClient;
 
       public Form1( )
       {
@@ -23,6 +22,12 @@
       {
          this.voOrig = new Bitmap( @"Resources\usmap.jpg" );
          this.voMap.Image = ( Image )this.voOrig;
+
+         Label[ ] koLabel = new Label[ ]
+         {
+            this.voLblBestResult0, this.voLblBestResult1, this.voLblBestResult2, this.voLblBestResult3
+         };
+         this.voClient = new Client( koLabel, this.voOrig, new Bitmap( this.voOrig ), this.voMap );
       }
 
       private void voBtnStartCap_Click( object sender, EventArgs e )
@@ -42,10 +47,6 @@
 
       private void voBtnEndCap_Click( object sender, EventArgs e )
       {
-         int kiDx;
-         int kiDy;
-         int kiD;
-
          /// -# End the capture
          this.vbCapture = false;
          
@@ -59,52 +60,11 @@
          GAWebLib.Constants.NumCities = this.voPoints.Count;
          // TODO: GAWebLib.Constants.MutationRate = float.Parse( 
          // TODO: GAWebLib.CrossoverRate = float.Parse(
-
-         this.viDistMat = new int[ this.voPoints.Count, this.voPoints.Count ];
-         for( int i = 0; i < this.voPoints.Count; i++ )
-         {
-            for( int j = i; j < this.voPoints.Count; j++ )
-            {
-               if( i == j )
-               {
-                  this.viDistMat[ i, j ] = 0;
-               }
-               else
-               {
-                  kiDx = Math.Abs( ( ( Point )this.voPoints[ i ] ).X - ( ( Point )this.voPoints[ j ] ).X );
-                  kiDy = Math.Abs( ( ( Point )this.voPoints[ i ] ).Y - ( ( Point )this.voPoints[ j ] ).Y );
-                  kiD = ( int )Math.Sqrt( ( kiDx * kiDx ) + ( kiDy * kiDy ) );
-                  this.viDistMat[ i, j ] = kiD;
-                  this.viDistMat[ j, i ] = kiD;
-               }
-            }
-         }
       }
 
       private void voBtnRunGADist_Click( object sender, EventArgs e )
       {
-         int[ ][ ] kiDistance;
-         Host.DistributorClient koClient;
-         
-         if( this.viDistMat != null )
-         {
-            /// -# Create the client
-            koClient = new Host.DistributorClient( );
-
-            /// -# Convert multi-dimensional array to jagged array
-            kiDistance = new int[ this.viDistMat.GetUpperBound( 0 ) ][ ];
-            Parallel.For( 0, this.viDistMat.GetUpperBound( 0 ), ( i ) =>
-            {
-               kiDistance[ i ] = new int[ this.viDistMat.GetUpperBound( 1 ) ];
-               for( int j = 0; j < this.viDistMat.GetUpperBound( 1 ); j++ )
-               {
-                  kiDistance[ i ][ j ] = this.viDistMat[ i, j ];
-               }
-            } ); 
-
-            /// -# Execute the GA Algorithm
-            koClient.MExecute( kiDistance, 1 );
-         }
+         this.voClient.MRun( this.voPoints );
       }
 
       private void voMap_MouseDown( object aoSender, MouseEventArgs aoArgs )

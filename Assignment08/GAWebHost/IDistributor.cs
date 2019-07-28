@@ -14,7 +14,7 @@
    [ ServiceContract( CallbackContract = typeof( ICallback ) ) ]
    public interface IDistributor
    {
-      [ OperationContract ]
+      [ OperationContract( IsOneWay = true ) ]
       void MExecute( int[ ][ ] aiDistMat, int aiNumWorkers );
    }
 }
