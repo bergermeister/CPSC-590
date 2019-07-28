@@ -37,7 +37,12 @@
          this.voLblBestResult2 = new System.Windows.Forms.Label();
          this.voLblBestResult1 = new System.Windows.Forms.Label();
          this.voLblBestResult0 = new System.Windows.Forms.Label();
+         this.voBtnLoad = new System.Windows.Forms.Button();
+         this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+         this.voLblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+         this.voProgress = new System.Windows.Forms.ToolStripProgressBar();
          ((System.ComponentModel.ISupportInitialize)(this.voMap)).BeginInit();
+         this.statusStrip1.SuspendLayout();
          this.SuspendLayout();
          // 
          // voBtnStartCap
@@ -69,7 +74,7 @@
          // voBtnRunGADist
          // 
          this.voBtnRunGADist.BackColor = System.Drawing.Color.White;
-         this.voBtnRunGADist.Location = new System.Drawing.Point(241, 11);
+         this.voBtnRunGADist.Location = new System.Drawing.Point(360, 11);
          this.voBtnRunGADist.Margin = new System.Windows.Forms.Padding(2);
          this.voBtnRunGADist.Name = "voBtnRunGADist";
          this.voBtnRunGADist.Size = new System.Drawing.Size(115, 24);
@@ -129,11 +134,48 @@
          this.voLblBestResult0.Size = new System.Drawing.Size(226, 67);
          this.voLblBestResult0.TabIndex = 12;
          // 
+         // voBtnLoad
+         // 
+         this.voBtnLoad.BackColor = System.Drawing.Color.White;
+         this.voBtnLoad.Location = new System.Drawing.Point(241, 11);
+         this.voBtnLoad.Margin = new System.Windows.Forms.Padding(2);
+         this.voBtnLoad.Name = "voBtnLoad";
+         this.voBtnLoad.Size = new System.Drawing.Size(115, 24);
+         this.voBtnLoad.TabIndex = 16;
+         this.voBtnLoad.Text = "Load From File";
+         this.voBtnLoad.UseVisualStyleBackColor = false;
+         this.voBtnLoad.Click += new System.EventHandler(this.voBtnLoad_Click);
+         // 
+         // statusStrip1
+         // 
+         this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.voLblStatus,
+            this.voProgress});
+         this.statusStrip1.Location = new System.Drawing.Point(0, 472);
+         this.statusStrip1.Name = "statusStrip1";
+         this.statusStrip1.Size = new System.Drawing.Size(863, 22);
+         this.statusStrip1.TabIndex = 17;
+         this.statusStrip1.Text = "statusStrip1";
+         // 
+         // voLblStatus
+         // 
+         this.voLblStatus.AutoSize = false;
+         this.voLblStatus.Name = "voLblStatus";
+         this.voLblStatus.Size = new System.Drawing.Size(100, 17);
+         this.voLblStatus.Text = "Idle";
+         // 
+         // voProgress
+         // 
+         this.voProgress.Name = "voProgress";
+         this.voProgress.Size = new System.Drawing.Size(100, 16);
+         // 
          // Form1
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(863, 450);
+         this.ClientSize = new System.Drawing.Size(863, 494);
+         this.Controls.Add(this.statusStrip1);
+         this.Controls.Add(this.voBtnLoad);
          this.Controls.Add(this.voLblBestResult3);
          this.Controls.Add(this.voLblBestResult2);
          this.Controls.Add(this.voLblBestResult1);
@@ -146,7 +188,10 @@
          this.Text = "Form1";
          this.Load += new System.EventHandler(this.Form1_Load);
          ((System.ComponentModel.ISupportInitialize)(this.voMap)).EndInit();
+         this.statusStrip1.ResumeLayout(false);
+         this.statusStrip1.PerformLayout();
          this.ResumeLayout(false);
+         this.PerformLayout();
 
       }
 
@@ -159,6 +204,10 @@
       private System.Windows.Forms.Label voLblBestResult2;
       private System.Windows.Forms.Label voLblBestResult1;
       private System.Windows.Forms.Label voLblBestResult0;
+      private System.Windows.Forms.Button voBtnLoad;
+      private System.Windows.Forms.StatusStrip statusStrip1;
+      private System.Windows.Forms.ToolStripStatusLabel voLblStatus;
+      private System.Windows.Forms.ToolStripProgressBar voProgress;
    }
 }
 

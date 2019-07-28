@@ -8,11 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GAWebHost.Servant {
+namespace GAWebHost.Servant2 {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="Servant.IWorker", CallbackContract=typeof(GAWebHost.Servant.IWorkerCallback))]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="Servant2.IWorker", CallbackContract=typeof(GAWebHost.Servant2.IWorkerCallback))]
     public interface IWorker {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IWorker/MRun")]
@@ -30,12 +30,12 @@ namespace GAWebHost.Servant {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IWorkerChannel : GAWebHost.Servant.IWorker, System.ServiceModel.IClientChannel {
+    public interface IWorkerChannel : GAWebHost.Servant2.IWorker, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class WorkerClient : System.ServiceModel.DuplexClientBase<GAWebHost.Servant.IWorker>, GAWebHost.Servant.IWorker {
+    public partial class WorkerClient : System.ServiceModel.DuplexClientBase<GAWebHost.Servant2.IWorker>, GAWebHost.Servant2.IWorker {
         
         public WorkerClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {

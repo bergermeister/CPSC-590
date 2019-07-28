@@ -60,7 +60,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="GAClient.cs" />
     <Compile Include="GAMember.cs" />
     <Compile Include="IGeneticAlgorithm.cs" />
     <Compile Include="IPopulationMember.cs" />

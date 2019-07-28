@@ -6,17 +6,21 @@
    using System.Threading.Tasks;
    using GAWebLib;
 
-   public class Distributor : IDistributor, Servant.IWorkerCallback
+   public class Distributor : IDistributor, Servant.IWorkerCallback, Servant2.IWorkerCallback
    {
-      private int[ ][ ]                    viDistance;
+      private double[ ][ ]                 vdDistance;
       private int                          viNumWorkers;
       private List< Pair< Worker, bool > > voWorkers;
       
-      public void MExecute( int[ ][ ] aiDistMat, int aiNumWorkers )
+      public void MExecute( double[ ][ ] adDistMat, int aiNumWorkers )
       {
-         Servant.WorkerClient koClient;
-         ICallback            koChannel;
-         Member[ ]            koBest;
+         Servant.WorkerClient  koClient1;
+         Servant2.WorkerClient koClient2;
+         ICallback             koChannel;
+         Member[ ]             koBest;
+
+         // TODO: Force workers to 2 for now
+         aiNumWorkers = 2;
 
          try
          {
@@ -25,20 +29,11 @@
             koChannel = OperationContext.Current.GetCallbackChannel< ICallback >( );
          
             /// -# Copy the distance matrix
-            this.viDistance = new int[ aiDistMat.Length ][ ];
-            for( int i = 0; i < aiDistMat.Length; i++ )
-            //Parallel.For( 0, aiDistMat.Length, ( i ) =>
-            {
-               this.viDistance[ i ] = new int[ aiDistMat[ i ].Length ];
-               for( int j = 0; j < aiDistMat[ i ].Length; j++ )
-               {
-                  this.viDistance[ i ][ j ] = aiDistMat[ i ][ j ];
-               }
-            } //);
+            this.vdDistance = adDistMat;
 
             /// -# Setup the Distance Matrix for the workers
-            Member.ViDistMatrix = this.viDistance;
-            Worker.ViDistance   = this.viDistance;
+            Member.VdDistMatrix = this.vdDistance;
+            Worker.VdDistance   = this.vdDistance;
 
             /// -# Store the number of Workers
             this.viNumWorkers = aiNumWorkers;
@@ -50,7 +45,7 @@
             this.voWorkers = new List< Pair< Worker, bool > >( this.viNumWorkers );
 
             /// -# Update the Constants
-            Constants.NumCities = aiDistMat.Length;
+            Constants.NumCities = adDistMat.Length;
 
             /// -# Initialize Workers
             for( int kiI = 0; kiI < this.viNumWorkers; kiI++ )
@@ -64,14 +59,13 @@
             }
 
             /// -# Distribute the work load
+            koClient1 = new Servant.WorkerClient( new InstanceContext( this ), "Worker" );
+            koClient2 = new Servant2.WorkerClient( new InstanceContext( this ), "Worker" );
             for( int kiIter = 0; kiIter < Constants.NumIterations; kiIter += Constants.ExchangeAfterIterations )
             {
                /// -# Launch each worker to run ExchangeAfterIterations number of iterations (default:500)
-               for( int kiI = 0; kiI < this.viNumWorkers; kiI++ )
-               {
-                  koClient = new Servant.WorkerClient( new InstanceContext( this ), "Worker" );
-                  koClient.MRun( this.voWorkers[ kiI ].VoItem1, this.viDistance, Constants.ExchangeAfterIterations );
-               }
+               koClient1.MRun( this.voWorkers[ 0 ].VoItem1, this.vdDistance, Constants.ExchangeAfterIterations );
+               koClient2.MRun( this.voWorkers[ 1 ].VoItem1, this.vdDistance, Constants.ExchangeAfterIterations );
 
                /// -# Wait for the workers to complete
                for( int kiI = 0; kiI < this.viNumWorkers; kiI++ )
@@ -107,7 +101,7 @@
       public void MOnComplete( Worker aoWorker )
       {
          Console.WriteLine( "{0} - Distributor: WORKER {1} COMPLETE", DateTime.Now, aoWorker.ViWorkerNum );
-         this.voWorkers[ aoWorker.ViWorkerNum ].VoItem1 = aoWorker;
+         this.voWorkers[ aoWorker.ViWorkerNum ].VoItem1 = ( Worker )aoWorker.Clone( );
          this.voWorkers[ aoWorker.ViWorkerNum ].VoItem2 = true;
       }
 

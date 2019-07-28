@@ -8,7 +8,7 @@
    [ DataContract ]
    public class Worker : IGeneticAlgorithm
    {
-      public static int[ ][ ] ViDistance; ///< Distance Matrix
+      public static double[ ][ ] VdDistance; ///< Distance Matrix
 
       [ DataMember ]
       public Member[ ] VoPopulation; ///< Population Members
@@ -36,16 +36,16 @@
 
       public void MInitialize( int aiSizePop, int aiNumCities, float afRateMutate, float afRateCross, int aiWorkerNum ) 
       {
-         this.VfRateMutat  = afRateMutate;
-         this.ViSizeMem    = aiNumCities + 1; // start and end city is 0
-         this.VfRateCross  = afRateCross;
+         this.VfRateMutat = afRateMutate;
+         this.ViSizeMem   = aiNumCities + 1; // start and end city is 0
+         this.VfRateCross = afRateCross;
 
-         this.VoPopulation = new Member[ aiSizePop ];
-         for( int i = 0; i < aiSizePop; i++ )
+         this.ViSizePop    = aiSizePop;
+         this.VoPopulation = new Member[ this.ViSizePop ];
+         for( int i = 0; i < this.ViSizePop; i++ )
          {
-            this.VoPopulation[i] = new Member( ViSizeMem );
+            this.VoPopulation[ i ] = new Member( this.ViSizeMem );
          } 
-         this.ViSizePop = aiSizePop;
 
          this.ViWorkerNum  = aiWorkerNum;
          
@@ -56,7 +56,7 @@
 
       public void MRun( int aiIterations )
       {
-         int kiBestFitness = this.VoPopulation[ 0 ].ViFitness;
+         double kdBestFitness = this.VoPopulation[ 0 ].VdFitness;
          
          this.VoBest = ( Member )this.VoPopulation[ 0 ].Clone( );
 
@@ -68,7 +68,7 @@
             this.MEvaluatePopulation( );
             Array.Sort( this.VoPopulation );  // sort population
 
-            if( this.VoPopulation[ 0 ].ViFitness < this.VoBest.ViFitness )
+            if( this.VoPopulation[ 0 ].VdFitness < this.VoBest.VdFitness )
             {
                this.VoBest = ( Member )VoPopulation[ 0 ].Clone( );
             }
@@ -81,9 +81,9 @@
                this.MEvaluatePopulation( );
                Array.Sort( this.VoPopulation );  // sort population
 
-               if( this.VoPopulation[ 0 ].ViFitness < kiBestFitness )
+               if( this.VoPopulation[ 0 ].VdFitness < kdBestFitness )
                {
-                  kiBestFitness = VoPopulation[ 0 ].ViFitness;
+                  kdBestFitness = VoPopulation[ 0 ].VdFitness;
                }
             }
          }
@@ -131,15 +131,15 @@
       {
          // randomize the population before selecting parents
          Random   koRand = new Random( System.DateTime.Now.Millisecond );
-         Member koTemp;
-         Member koCross1, koCross2;  // Crossover Members
+         Member   koTemp;
+         Member   koCross1, koCross2;  // Crossover Members
          int      kiPos1, kiPos2;
          int      kiPar1, kiPar2;  // Parents 1 and 2
          int      kiI, kiJ, kiK;    // Loop iterators
          int      kiCut1, kiCut2;
          int      kiStartPos;
-         Hashtable koHash1 = new Hashtable();
-         Hashtable koHash2 = new Hashtable();
+         Hashtable koHash1 = new Hashtable( );
+         Hashtable koHash2 = new Hashtable( );
 
          for( kiI = 0; kiI < ( this.ViSizePop * 10 ); kiI++)
          {

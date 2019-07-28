@@ -15,6 +15,6 @@
    public interface IDistributor
    {
       [ OperationContract( IsOneWay = true ) ]
-      void MExecute( int[ ][ ] aiDistMat, int aiNumWorkers );
+      void MExecute( double[ ][ ] adDistMat, int aiNumWorkers );
    }
 }

@@ -5,76 +5,48 @@
    using System.Collections.Generic;
    using System.Drawing;
    using System.ServiceModel;
-   using System.Threading.Tasks;
    using System.Windows.Forms;
    using GAWebLib;
 
    class Client : Host.IDistributorCallback
    {
-      private Label[ ]   voLabel;
-      private PictureBox voMap;
-      private Bitmap     voOrig;
-      private Bitmap     voWork;
-      private ArrayList  voPoints;
+      private Label[ ]             voLabel;
+      private PictureBox           voMap;
+      private Bitmap               voOrig;
+      private Bitmap               voWork;
+      private ArrayList            voPoints;
+      private ToolStripStatusLabel voStatus;
+      private ToolStripProgressBar voProgress;
+      private int                  viUpdates;
 
-      public Client( Label[ ] aoLabel, Bitmap aoOrig, Bitmap aoWork, PictureBox aoMap )
+      public Client( Label[ ] aoLabel, Bitmap aoOrig, Bitmap aoWork, PictureBox aoMap, ToolStripStatusLabel aoStatus, ToolStripProgressBar aoProgress )
       {
-         this.voLabel = aoLabel;
-         this.voOrig  = aoOrig;
-         this.voWork  = aoWork;
-         this.voMap   = aoMap;
+         this.voLabel    = aoLabel;
+         this.voOrig     = aoOrig;
+         this.voWork     = aoWork;
+         this.voMap      = aoMap;
+         this.voStatus   = aoStatus;
+         this.voProgress = aoProgress;
       }
 
-      public bool MRun( ArrayList aoPoints )
+      public bool MRun( ArrayList aoPoints, double[ ][ ] adDistance )
       {
-         int[ ][ ]              kiDistance;
          Host.DistributorClient koClient;
          bool                   kbStatus = false;
          
          this.voPoints = aoPoints;
 
+         this.viUpdates = 0;
+
          if( ( aoPoints != null ) && ( aoPoints.Count > 0 ) )
          {
             kbStatus = true;
-
-            /// -# Create the distance jagged array
-            kiDistance = new int[ aoPoints.Count ][ ];
-            for( int kiI = 0; kiI < aoPoints.Count; kiI++ )
-            {
-               kiDistance[ kiI ] = new int[ aoPoints.Count ];
-            }
-
-            /// -# Fill the distance jagged array
-            Parallel.For( 0, aoPoints.Count, ( kiI ) =>
-            {
-               int kiDx;
-               int kiDy;
-               int kiD;
-
-               kiDistance[ kiI ] = new int[ aoPoints.Count ];
-               for( int kiJ = kiI; kiJ < aoPoints.Count; kiJ++ )
-               {
-                  if( kiI == kiJ )
-                  {
-                     kiDistance[ kiI ][ kiJ ] = 0;
-                  }
-                  else
-                  {
-                     kiDx = Math.Abs( ( ( Point )aoPoints[ kiI ] ).X - ( ( Point )aoPoints[ kiJ ] ).X );
-                     kiDy = Math.Abs( ( ( Point )aoPoints[ kiI ] ).Y - ( ( Point )aoPoints[ kiJ ] ).Y );
-                     kiD = ( int )Math.Sqrt( ( kiDx * kiDx ) + ( kiDy * kiDy ) );
-                     kiDistance[ kiI][ kiJ ] = kiD;
-                     kiDistance[ kiJ][ kiI ] = kiD;
-                  }
-               }
-            } );
-
 
             /// -# Create the client
             koClient = new Host.DistributorClient( new InstanceContext( this ), "Distributor" );
 
             /// -# Execute the GA Algorithm
-            koClient.MExecute( kiDistance, 4 );
+            koClient.MExecute( adDistance, 2 );
          }
 
          return( kbStatus );
@@ -93,6 +65,10 @@
 
          TSGAMT2010.MyImageProc.DrawBestTour( this.voOrig, ref this.voWork, this.voPoints, koMembers[ 0 ].ViMem );
          this.voMap.Image = this.voWork;
+
+         this.viUpdates++;
+         this.voProgress.Value = ( int )( ( ( double )this.viUpdates * ( double )Constants.ExchangeAfterIterations * 100.0 ) / ( double )Constants.NumIterations );
+         this.voStatus.Text = "Running";
       }
 
       public void MOnComplete( Member[ ] aoMembers )
@@ -102,6 +78,9 @@
          {
             this.voLabel[ i ].Text = aoMembers[ i ].ToString( );
          }
+
+         this.voProgress.Value = 100;
+         this.voStatus.Text = "Complete";
       }
    }
 }

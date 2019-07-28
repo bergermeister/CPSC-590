@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="GAWebServant2.Worker" CodeBehind="Worker.svc.cs" %>

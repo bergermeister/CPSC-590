@@ -7,13 +7,13 @@
    [ DataContract ]
    public class Member : IPopulationMember, IComparable, ICloneable
    {
-      public static int[ ][ ] ViDistMatrix; // common for all
+      public static double[ ][ ] VdDistMatrix; // common for all
 
       [ DataMember ]
       public int[ ] ViMem;   
 
       [ DataMember ]
-      public int ViFitness;
+      public double VdFitness;
 
       [ DataMember ]
       public int ViMemSize;
@@ -37,7 +37,7 @@
          }
 
          koMem.ViMemSize = this.ViMemSize;
-         koMem.ViFitness = this.ViFitness;
+         koMem.VdFitness = this.VdFitness;
 
          return( koMem );
       }
@@ -55,7 +55,7 @@
       public int CompareTo( object aoRHS )  // for sorting
       {
          Member koMR = ( Member )aoRHS;
-         return( this.ViFitness.CompareTo( koMR.ViFitness ) );  // index 0 is best
+         return( this.VdFitness.CompareTo( koMR.VdFitness ) );  // index 0 is best
       }
 
       #region IPopulationMember Members
@@ -84,10 +84,10 @@
 
       public void EvaluateMember( )
       {
-         this.ViFitness = ViDistMatrix[ ViMem[ 0 ] ][ ViMem[ 1 ] ];
+         this.VdFitness = VdDistMatrix[ ViMem[ 0 ] ][ ViMem[ 1 ] ];
          for( int kiI = 1; kiI < this.ViMemSize - 1; kiI++ )
          {
-            this.ViFitness = this.ViFitness + ViDistMatrix[ this.ViMem[ kiI ] ][ this.ViMem[ kiI + 1 ] ];
+            this.VdFitness = this.VdFitness + VdDistMatrix[ this.ViMem[ kiI ] ][ this.ViMem[ kiI + 1 ] ];
          }
       }
 

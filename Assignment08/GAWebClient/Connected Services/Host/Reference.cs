@@ -16,10 +16,10 @@ namespace GAWebClient.Host {
     public interface IDistributor {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IDistributor/MExecute")]
-        void MExecute(int[][] aiDistMat, int aiNumWorkers);
+        void MExecute(double[][] adDistMat, int aiNumWorkers);
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IDistributor/MExecute")]
-        System.Threading.Tasks.Task MExecuteAsync(int[][] aiDistMat, int aiNumWorkers);
+        System.Threading.Tasks.Task MExecuteAsync(double[][] adDistMat, int aiNumWorkers);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -60,12 +60,12 @@ namespace GAWebClient.Host {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void MExecute(int[][] aiDistMat, int aiNumWorkers) {
-            base.Channel.MExecute(aiDistMat, aiNumWorkers);
+        public void MExecute(double[][] adDistMat, int aiNumWorkers) {
+            base.Channel.MExecute(adDistMat, aiNumWorkers);
         }
         
-        public System.Threading.Tasks.Task MExecuteAsync(int[][] aiDistMat, int aiNumWorkers) {
-            return base.Channel.MExecuteAsync(aiDistMat, aiNumWorkers);
+        public System.Threading.Tasks.Task MExecuteAsync(double[][] adDistMat, int aiNumWorkers) {
+            return base.Channel.MExecuteAsync(adDistMat, aiNumWorkers);
         }
     }
 }

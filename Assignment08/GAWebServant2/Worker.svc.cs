@@ -1,4 +1,4 @@
-﻿namespace GAWebServant
+﻿namespace GAWebServant2
 {
    using System;
    using System.ServiceModel;
