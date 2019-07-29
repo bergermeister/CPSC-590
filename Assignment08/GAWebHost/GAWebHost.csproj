@@ -115,7 +115,7 @@
       <DependentUpon>Distributor.svc</DependentUpon>
     </Compile>
     <Compile Include="IDistributor.cs" />
-    <Compile Include="Pair.cs" />
+    <Compile Include="Habitat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
