@@ -56,14 +56,16 @@ def main( ):
    kfX = numpy.random.random_sample( ( XiSize, XiSize ) ).astype( numpy.float32 )
    kfY = numpy.random.random_sample( ( XiSize, XiSize ) ).astype( numpy.float32 )
    kfR = numpy.zeros_like( kfX )
+   kfR2 = numpy.matmul( kfX, kfY )
 
    # Execute the kernel
    aoMultiplyKernel( drv.Out( kfR ), drv.In( kfX ), drv.In( kfY ), 
-                   block = ( XiSize, XiSize, 4 ), grid=( 1, 1 ) )
+                   block = ( int( XiSize / 1 ), int( XiSize / 1 ), 4 ), grid=( 1, 1 ) )
 
    print( kfX )
    print( kfY )
    print( kfR )
+   print( kfR2 )
 
 if __name__ == "__main__":
    sys.exit( int(main() or 0 ) )
