@@ -52,6 +52,7 @@
          this.voBtnParallel.TabIndex = 1;
          this.voBtnParallel.Text = "Parallel LU Decomposition";
          this.voBtnParallel.UseVisualStyleBackColor = true;
+         this.voBtnParallel.Click += new System.EventHandler(this.voBtnParallel_Click);
          // 
          // voTbSize
          // 

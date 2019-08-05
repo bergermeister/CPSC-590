@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ParallelLUDecomposition
+﻿namespace ParallelLUDecomposition
 {
+   using System.Threading;
+
    class Block
    {
       private double[ , ] vdA;
@@ -16,9 +12,11 @@ namespace ParallelLUDecomposition
       private int         viSize;
       private int         viI;
       private int         viJ;
+      private Semaphore   voSem;
 
       public Block( double[ , ] adA, double[ , ] adL, double[ , ] adU, 
-                    int aiRow, int aiCol, int aiSize, int aiI, int aiJ )
+                    int aiRow, int aiCol, int aiSize, int aiI, int aiJ,
+                    Semaphore aoSemaphore )
       {
          this.vdA = adA;
          this.vdL = adL;
@@ -28,6 +26,7 @@ namespace ParallelLUDecomposition
          this.viSize = aiSize;
          this.viI = aiI;
          this.viJ = aiJ;
+         this.voSem = aoSemaphore;
       }
 
       public Matrix VdA
@@ -88,9 +87,28 @@ namespace ParallelLUDecomposition
          get{ return( this.viJ ); }
       }
 
+      public int ViRow
+      {
+         get{ return( this.viRow ); }
+      }
+
+      public int ViCol
+      {
+         get{ return( this.viCol ); }
+      }
+
+      public Semaphore VoSemaphore
+      {
+         get{ return( this.voSem ); }
+      }
+
       public void MDecompose( Block[ , ] aoBlock )
       {
-         Matrix      koA = new Matrix( this.viSize, this.viSize );
+         Matrix      koA = this.VdA;
+         Block       koBi = null;
+         Block       koBj = null;
+         Matrix      koAi = null;
+         Matrix      koAj = null;
          double[ , ] kdL = new double[ this.viSize, this.viSize ];
          double[ , ] kdU = new double[ this.viSize, this.viSize ];
 
@@ -103,13 +121,40 @@ namespace ParallelLUDecomposition
             }
          }
 
-         if( this.viI > 0 )
+         /// -# Compute Ann' = Ann - (Ln1 * U1n + ... + Lm1 * U1m)
+         for( int kiI = 0; kiI < this.viI; kiI++ )
          {
-            koA = koA - ( aoBlock[ this.viI, this.viJ - 1 ].VdL * aoBlock[ this.viI - 1, this.viJ ].VdU );
+            koA = koA - ( aoBlock[ this.viI, kiI ].VdL * aoBlock[ kiI, this.viI ].VdU );
          }
 
          /// -# Perform LU Decomposition
          koA.MLUDecompose( kdL, kdU );
+
+         /// -# Compute A' for A[i,i+1] and A[i+1,i]
+         if( this.viI > 0 )
+         {
+            for( int kiI = 1; ( this.viI + kiI ) < aoBlock.GetLength( 0 ); kiI++ )
+            //if( ( this.viI > 0 ) && ( this.viI < aoBlock.GetUpperBound( 0 ) ) )
+            {
+               koBj = aoBlock[ this.viI, this.viI + kiI ];
+               koBi = aoBlock[ this.viI + kiI, this.viI ];
+
+               // A[i,i+1] = A[i,i+1] - ( L[i, i-1] * U[i-1,i+1] )
+               koAj = koBj.VdA - ( aoBlock[ this.viI, this.viI - 1 ].VdL * aoBlock[ this.viI - 1, this.viI + kiI ].VdU );
+            
+               // A[i+1,i] = A[i+1,i] - ( L[i+1, i-1] * U[i-1,i] )
+               koAi = koBi.VdA - ( aoBlock[ this.viI + kiI, this.viI - 1 ].VdL * aoBlock[ this.viI - 1, this.viI ].VdU );
+         
+               for( int kiR = 0; kiR < this.viSize; kiR++ )
+               {
+                  for( int kiC = 0; kiC < this.viSize; kiC++ )
+                  {
+                     this.vdA[ koBi.ViRow + kiR, koBi.ViCol + kiC ] = koAi[ kiR, kiC ];
+                     this.vdA[ koBj.ViRow + kiR, koBj.ViCol + kiC ] = koAj[ kiR, kiC ];
+                  }
+               }
+            }
+         }
 
          /// -# Copy data, L, and U out
          for( int kiR = 0; kiR < this.viSize; kiR++ )
@@ -119,6 +164,11 @@ namespace ParallelLUDecomposition
                this.vdA[ this.viRow + kiR, this.viCol + kiC ] = koA[ kiR, kiC ];
                this.vdL[ this.viRow + kiR, this.viCol + kiC ] = kdL[ kiR, kiC ];
                this.vdU[ this.viRow + kiR, this.viCol + kiC ] = kdU[ kiR, kiC ];
+               if( ( koBj != null ) && ( koBi != null ) && ( koAi != null ) && ( koAj != null ) )
+               {
+                  this.vdA[ koBi.ViRow + kiR, koBi.ViCol + kiC ] = koAi[ kiR, kiC ];
+                  this.vdA[ koBj.ViRow + kiR, koBj.ViCol + kiC ] = koAj[ kiR, kiC ];
+               }
             }
          }
       }

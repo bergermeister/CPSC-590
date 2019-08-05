@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace ParallelLUDecomposition
+﻿namespace ParallelLUDecomposition
 {
+   using System;
+   using System.Threading;
+   using System.Threading.Tasks;
+
    class Matrix
    {
       private int         viRows;
@@ -42,51 +42,65 @@ namespace ParallelLUDecomposition
 
       public void MLUDecomposeBlock( double[ , ] adL, double[ , ] adU, int aiSize, ref double adError )
       {
-         int            kiCount = this.viRows / aiSize;
-         double[ , ]    kdRes   = new double[ this.viRows, this.viRows ];
-         Block[ , ]     koBlock = new Block[ kiCount, kiCount ];
-         Task[ , ]      koTask  = new Task[ kiCount, kiCount ];
-         Semaphore[ , ] koSem   = new Semaphore[ kiCount, kiCount ];
+         int         kiCount = this.viRows / aiSize;
+         double[ , ] kdA;
+         double[ , ] kdRes   = new double[ this.viRows, this.viRows ];
+         Block[ , ]  koBlock = new Block[ kiCount, kiCount ];
+         Task[ , ]   koTask  = new Task[ kiCount, kiCount ];
 
          adError = 0.0;
+
+         kdA = ( double[ , ] )this.vdData.Clone( );
 
          /// -# Break the matrix into blocks
          for( int kiI = 0; kiI < kiCount; kiI++ )
          {
-            koSem  [ kiI, kiI ] = new Semaphore( 0, 2 * kiCount );
-            koBlock[ kiI, kiI ] = new Block( this.vdData, adL, adU, kiI * aiSize, kiI * aiSize, aiSize, kiI, kiI );
-            koTask [ kiI, kiI ] = new Task( ( aoBlock ) =>
+            koBlock[ kiI, kiI ] = new Block( this.vdData, adL, adU, kiI * aiSize, kiI * aiSize, aiSize, kiI, kiI, new Semaphore( 0, 2 * kiCount ) );
+
+            /// -# create a task for computing diagonals (A11, A22, A33, etc...)
+            koTask [ kiI, kiI ] = new Task( ( aiI ) =>
             {
-               Block koB = ( Block )aoBlock;
-               if( koB.ViI > 0 )
+               int   kiIb = ( int )aiI;
+               Block koB = koBlock[ kiIb, kiIb ];
+               if( kiIb > 0 )
                {
-                  koSem[ koB.ViI - 1, koB.ViI ].WaitOne( );
-                  koSem[ koB.ViI, koB.ViI - 1 ].WaitOne( );
+                  koBlock[ kiIb - 1, kiIb ].VoSemaphore.WaitOne( );
+                  koBlock[ kiIb, kiIb - 1 ].VoSemaphore.WaitOne( );
                }
-               ( ( Block )aoBlock ).MDecompose( koBlock );
-               koSem[ koB.ViI, koB.ViI ].Release( 2 * kiCount );
-            }, koBlock[ kiI, kiI ] );
+               /// -# Step 1. A11 = L11 * U11
+               /// -# Step 3. A22' = A22 - ( L21 * U12 ) = L22 * U22
+               Console.WriteLine( "LU Decomposition Block[{0},{1}] Start", koB.ViI, koB.ViJ );
+               koB.MDecompose( koBlock );
+               Console.WriteLine( "LU Decomposition Block[{0},{1}] End", koB.ViI, koB.ViJ );
+               koB.VoSemaphore.Release( 2 * kiCount );
+            }, kiI ); // koBlock[ kiI, kiI ] );
+            
+            // Create tasks for rows and columns
             for( int kiJ = kiI + 1; kiJ < kiCount; kiJ++ )
             {
-               koSem  [ kiI, kiJ ] = new Semaphore( 0, 1 );
-               koBlock[ kiI, kiJ ] = new Block( this.vdData, adL, adU, kiI * aiSize, kiJ * aiSize, aiSize, kiI, kiJ );
-               koTask[ kiI, kiJ ] = new Task( ( aoBlock ) =>
-               {
-                  Block koB = ( Block )aoBlock;
-                  koSem[ koB.ViI, koB.ViI ].WaitOne( );
-                  ( ( Block )aoBlock ).MComputeU( koBlock );
-                  koSem[ koB.ViI, koB.ViJ ].Release( );
-               }, koBlock[ kiI, kiJ ] );
-
-               koSem  [ kiJ, kiI ] = new Semaphore( 0, 1 );
-               koBlock[ kiJ, kiI ] = new Block( this.vdData, adL, adU, kiJ * aiSize, kiI * aiSize, aiSize, kiJ, kiI );
+               /// Step 2. L21 = A21 * U11^-1; L31 = A31 * U11^-1
+               koBlock[ kiJ, kiI ] = new Block( this.vdData, adL, adU, kiJ * aiSize, kiI * aiSize, aiSize, kiJ, kiI, new Semaphore( 0, 1 ) );
                koTask[ kiJ, kiI ] = new Task( ( aoBlock ) =>
                {
                   Block koB = ( Block )aoBlock;
-                  koSem[ koB.ViJ, koB.ViJ ].WaitOne( );
+                  koBlock[ koB.ViJ, koB.ViJ ].VoSemaphore.WaitOne( );
+                  Console.WriteLine( "L Decomposition Block[{0},{1}] Start", koB.ViI, koB.ViJ );
                   ( ( Block )aoBlock ).MComputeL( koBlock );
-                  koSem[ koB.ViI, koB.ViJ ].Release( );
+                  Console.WriteLine( "L Decomposition Block[{0},{1}] End", koB.ViI, koB.ViJ );
+                  koBlock[ koB.ViI, koB.ViJ ].VoSemaphore.Release( );
                }, koBlock[ kiJ, kiI ] );
+
+               /// Step 2. U12 = L11^-1 * A12; U13 = L11^-1 * A13
+               koBlock[ kiI, kiJ ] = new Block( this.vdData, adL, adU, kiI * aiSize, kiJ * aiSize, aiSize, kiI, kiJ, new Semaphore( 0, 1 ) );
+               koTask[ kiI, kiJ ] = new Task( ( aoBlock ) =>
+               {
+                  Block koB = ( Block )aoBlock;
+                  koBlock[ koB.ViI, koB.ViI ].VoSemaphore.WaitOne( );
+                  Console.WriteLine( "U Decomposition Block[{0},{1}] Start", koB.ViI, koB.ViJ );
+                  ( ( Block )aoBlock ).MComputeU( koBlock );
+                  Console.WriteLine( "L Decomposition Block[{0},{1}] End", koB.ViI, koB.ViJ );
+                  koBlock[ koB.ViI, koB.ViJ ].VoSemaphore.Release( );
+               }, koBlock[ kiI, kiJ ] );
             }
          }
 
@@ -118,7 +132,7 @@ namespace ParallelLUDecomposition
          {
             for( int kiJ = 0; kiJ < this.viRows; kiJ++ )
             {
-               adError += Math.Abs( kdRes[ kiI, kiJ ] - this.vdData[ kiI, kiJ ] );
+               adError += Math.Abs( kdRes[ kiI, kiJ ] - kdA[ kiI, kiJ ] );
             }
          }
       }
@@ -129,11 +143,6 @@ namespace ParallelLUDecomposition
          {
             throw new Exception( "Row and Column dimensions are not the same." );
          }
-
-         /// -# Copy data into a matrix
-         double[ , ] kdA;
-
-         kdA = ( double[ , ] )this.vdData.Clone( );
 
          for( int kiK = 0; kiK < this.viRows; kiK++ )
          {
